@@ -21,9 +21,9 @@ const mat3 intrinsic_matrix = (mat3){{
 
 const uint8_t alert_colors[][4] = {
   [STATUS_STOPPED] = {0x07, 0x23, 0x39, 0xf1},
-  [STATUS_DISENGAGED] = {0x17, 0x33, 0x49, 0xc8},
+  [STATUS_DISENGAGED] = {0x55, 0x4A, 0x7C, 0xC8},
   [STATUS_ENGAGED] = {0xF3, 0x6F, 0xFE, 0xff},
-  [STATUS_WARNING] = {0xDA, 0x6F, 0x25, 0xf1},
+  [STATUS_WARNING] = {0xFF, 0x72, 0x70, 0xff},
   [STATUS_ALERT] = {0xC9, 0x22, 0x31, 0xf1},
 };
 
@@ -402,7 +402,7 @@ static void ui_draw_world(UIState *s) {
       fillAlpha = (int)(fmin(fillAlpha, 255));
     }
     draw_chevron(s, scene->lead_d_rel+2.7, scene->lead_y_rel, 25,
-                  nvgRGBA(201, 34, 49, fillAlpha), nvgRGBA(218, 202, 37, 255));
+                  nvgRGBA(201, 34, 49, fillAlpha), nvgRGBA(255, 158, 234, 200));
   }
 }
 
@@ -449,7 +449,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, viz_maxspeed_x, viz_maxspeed_y, viz_maxspeed_w, viz_maxspeed_h, 30);
   if (is_set_over_limit) {
-    nvgFillColor(s->vg, nvgRGBA(218, 111, 37, 180));
+    nvgFillColor(s->vg, nvgRGBA(255, 114, 112, 180));
   } else {
     nvgFillColor(s->vg, nvgRGBA(0, 0, 0, 100));
   }
@@ -459,7 +459,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, viz_maxspeed_x, viz_maxspeed_y, viz_maxspeed_w, viz_maxspeed_h, 20);
   if (is_set_over_limit) {
-    nvgStrokeColor(s->vg, nvgRGBA(218, 111, 37, 255));
+    nvgStrokeColor(s->vg, nvgRGBA(255, 114, 112, 255));
   } else if (is_speedlim_valid && !s->is_ego_over_limit) {
     nvgStrokeColor(s->vg, nvgRGBA(255, 255, 255, 255));
   } else if (is_speedlim_valid && s->is_ego_over_limit) {
@@ -532,7 +532,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, viz_speedlim_x, viz_speedlim_y, viz_speedlim_w, viz_speedlim_h, viz_speedlim_bdr);
   if (is_speedlim_valid && s->is_ego_over_limit) {
-    nvgFillColor(s->vg, nvgRGBA(218, 111, 37, 180));
+    nvgFillColor(s->vg, nvgRGBA(255, 114, 112, 180));
   } else if (is_speedlim_valid) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
   } else {
@@ -547,7 +547,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
     nvgBeginPath(s->vg);
     nvgRoundedRect(s->vg, viz_speedlim_x, viz_speedlim_y, viz_speedlim_w, viz_speedlim_h, 20);
     if (s->is_ego_over_limit) {
-      nvgStrokeColor(s->vg, nvgRGBA(218, 111, 37, 255));
+      nvgStrokeColor(s->vg, nvgRGBA(255, 114, 112, 255));
     } else if (is_speedlim_valid) {
       nvgStrokeColor(s->vg, nvgRGBA(255, 255, 255, 255));
     }
@@ -655,9 +655,9 @@ static void ui_draw_vision_event(UIState *s) {
       if (is_engaged) {
         nvgFillColor(s->vg, nvgRGBA(243, 111, 254, 255));
       } else if (is_warning) {
-        nvgFillColor(s->vg, nvgRGBA(218, 111, 37, 255));
+        nvgFillColor(s->vg, nvgRGBA(255, 114, 112));
       } else if (is_engageable) {
-        nvgFillColor(s->vg, nvgRGBA(23, 51, 73, 255));
+        nvgFillColor(s->vg, nvgRGBA(85, 74, 124, 255));
       }
       nvgFill(s->vg);
       img_wheel_alpha = 1.0f;
