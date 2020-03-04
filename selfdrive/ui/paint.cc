@@ -655,7 +655,7 @@ static void ui_draw_vision_event(UIState *s) {
       if (is_engaged) {
         nvgFillColor(s->vg, nvgRGBA(243, 111, 254, 255));
       } else if (is_warning) {
-        nvgFillColor(s->vg, nvgRGBA(255, 114, 112));
+        nvgFillColor(s->vg, nvgRGBA(255, 114, 112, 255));
       } else if (is_engageable) {
         nvgFillColor(s->vg, nvgRGBA(85, 74, 124, 255));
       }
