@@ -71,7 +71,7 @@ class CarController():
     self.turning_signal_timer = 0
     self.lkas_button = 1
     self.lkas_button_last = 0
-    self.longcontrol = 0 #TODO: make auto
+    self.longcontrol = 1 #enabling long control on a car without an SCC bus. what could go wrong?
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
               left_line, right_line, left_lane_depart, right_lane_depart):
@@ -96,7 +96,7 @@ class CarController():
       self.lkas_button_last = CS.lkas_button_on
 
     # disable if steer angle reach 90 deg, otherwise mdps fault in some models
-    lkas_active = enabled and abs(CS.angle_steers) < 90. and self.lkas_button
+    # this is annoying and my car dont do that so imma disable lkas_active = enabled and abs(CS.angle_steers) < 90. and self.lkas_button
 
     # fix for Genesis hard fault at low speed
     if CS.v_ego < 16.7 and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
