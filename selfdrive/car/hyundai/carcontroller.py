@@ -137,8 +137,10 @@ class CarController():
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
       self.scc12_cnt = CS.scc12["CR_VSM_Alive"] + 1 if not CS.no_radar else 0
+      self.scc11_cnt = 0
 
     self.lkas11_cnt %= 0x10
+    self.scc11_cnt %= 0xF
     self.scc12_cnt %= 0xF
     self.clu11_cnt = frame % 0x10
     self.mdps12_cnt = frame % 0x100
@@ -158,13 +160,14 @@ class CarController():
 
     if ((CS.scc_bus and self.longcontrol) or self.sccEmulation) and frame % 2: # send scc12 to car if SCC not on bus 0 and longcontrol enabled
       if self.sccEmulation:
-        can_sends.append(create_scc11(self.packer, enabled, CS.scc11))
-        can_sends.append(create_scc14(self.packer, enabled, CS.scc14))
+        can_sends.append(create_scc11(self.packer, enabled, scc11_cnt))
+        self.scc11_cnt += 1
+        can_sends.append(create_scc14(self.packer, enabled))
       can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))
       self.scc12_cnt += 1
 
     if (self.sccEmulation) and frame % 20:
-      can_sends.append(create_scc13(self.packer, CS.scc13))
+      can_sends.append(create_scc13(self.packer))
 
     if CS.stopped:
       # run only first time when the car stopped

@@ -73,7 +73,7 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
 
   return packer.make_can_msg("CLU11", bus, values)
 
-def create_scc11(packer, enabled, scc11):
+def create_scc11(packer, enabled, count):
   objValid = 0
   objStatus = 0
   objDist = 150
@@ -83,45 +83,45 @@ def create_scc11(packer, enabled, scc11):
     objDist = 3
   values = {
     "MainMode_ACC": enabled,
-    "SCCInfoDisplay": scc11["SCCInfoDisplay"],#
-    "AliveCounterACC": scc11["AliveCounterACC"],#
-    "VSetDis": scc11["VSetDis"],  # km/h velosity
-    "ObjValid": objValid,#
-    "DriverAlertDisplay": scc11["DriverAlertDisplay"],#
-    "TauGapSet": scc11["TauGapSet"],#
-    "Navi_SCC_Curve_Status": scc11["Navi_SCC_Curve_Status"],#
-    "Navi_SCC_Curve_Act": scc11["Navi_SCC_Curve_Act"],#
-    "Navi_SCC_Camera_Act": scc11["Navi_SCC_Camera_Act"],#
-    "Navi_SCC_Camera_Status": scc11["Navi_SCC_Camera_Status"],#
-    "ACC_ObjStatus": objStatus,#
-    "ACC_ObjDist": objDist, # no object in front
-    "ACC_ObjLatPos": scc11["ACC_ObjLatPos"],
-    "ACC_ObjRelSpd": scc11["ACC_ObjRelSpd"],
+    "SCCInfoDisplay": 0,
+    "AliveCounterACC": count%16,
+    "VSetDis": 0,  # km/h velosity
+    "ObjValid": objValid,
+    "DriverAlertDisplay": 0,
+    "TauGapSet": 1,
+    "Navi_SCC_Curve_Status": 0,
+    "Navi_SCC_Curve_Act": 0,
+    "Navi_SCC_Camera_Act": 0,
+    "Navi_SCC_Camera_Status": 0,
+    "ACC_ObjStatus": objStatus,
+    "ACC_ObjDist": objDist,
+    "ACC_ObjLatPos":0,
+    "ACC_ObjRelSpd":0,
   }
   return packer.make_can_msg("SCC11", 0, values)
 
 def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
   if sccEmulation:
     values = {
-      "CF_VSM_Prefill": scc12["CF_VSM_Prefill"],
-      "CF_VSM_DecCmdAct": scc12["CF_VSM_DecCmdAct"],
-      "CF_VSM_HBACmd": scc12["CF_VSM_HBACmd"],
-      "CF_VSM_Warn": scc12["CF_VSM_Warn"],
-      "CF_VSM_Stat": scc12["CF_VSM_Stat"],
-      "CF_VSM_BeltCmd": scc12["CF_VSM_BeltCmd"],
-      "ACCFailInfo": scc12["ACCFailInfo"],
-      "ACCMode": scc12["ACCMode"],
-      "StopReq": scc12["StopReq"],
-      "CR_VSM_DecCmd": scc12["CR_VSM_DecCmd"],
-      "aReqMax": apply_accel if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
-      "TakeOverReq": scc12["TakeOverReq"],
-      "PreFill": scc12["PreFill"],
-      "aReqMin": apply_accel if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
-      "CF_VSM_ConfMode": scc12["CF_VSM_ConfMode"],
-      "AEB_Failinfo": scc12["AEB_Failinfo"],
-      "AEB_Status": scc12["AEB_Status"],
-      "AEB_CmdAct": scc12["AEB_CmdAct"],
-      "AEB_StopReq": scc12["AEB_StopReq"],
+      "CF_VSM_Prefill": 0,
+      "CF_VSM_DecCmdAct": 0,
+      "CF_VSM_HBACmd": 0,
+      "CF_VSM_Warn": 0,
+      "CF_VSM_Stat": 0,
+      "CF_VSM_BeltCmd": 0,
+      "ACCFailInfo": 0,
+      "ACCMode": enabled,
+      "StopReq": 0,
+      "CR_VSM_DecCmd": 0,
+      "aReqMax": apply_accel if enabled else 0,
+      "TakeOverReq": 0,
+      "PreFill": 0,
+      "aReqMin": apply_accel if enabled else -10,
+      "CF_VSM_ConfMode": 0,
+      "AEB_Failinfo": 0,
+      "AEB_Status": 0,
+      "AEB_CmdAct": 0,
+      "AEB_StopReq": 0,
       "CR_VSM_Alive": cnt,
       "CR_VSM_ChkSum": 0,
     }
@@ -154,32 +154,30 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
 
   return packer.make_can_msg("SCC12", 0, values)
 
-def create_scc13(packer, scc13):
+def create_scc13(packer):
   values = {
-    "SCCDrvModeRValue" : scc13["SCCDrvModeRValue"],#
-    "SCC_Equip" : scc13["SCC_Equip"],#
-    "AebDrvSetStatus" : scc13["AebDrvSetStatus"],
+    "SCCDrvModeRValue" : 2,
+    "SCC_Equip" : 1,
+    "AebDrvSetStatus" : 0,
   }
   return packer.make_can_msg("SCC13", 0, values)
 
-def create_scc14(packer, enabled, scc14):
+def create_scc14(packer, enabled):
   if enabled:
     values = {
-      "JerkUpperLimit" : scc14["JerkUpperLimit"],
-      "JerkLowerLimit" : scc14["JerkLowerLimit"],
-      "SCCMode" : scc14["SCCMode"],
-      "ColRiskF" : scc14["ColRiskF"],
-      "ComfortBandUpper" : scc14["ComfortBandUpper"],
-      "ComfortBandLower" : scc14["ComfortBandLower"],
+      "JerkUpperLimit" : 3.2,
+      "JerkLowerLimit" : 0.1,
+      "SCCMode" : 1,
+      "ComfortBandUpper" : 0.24,
+      "ComfortBandLower" : 0.24,
     }
   else:
     values = {
-      "JerkUpperLimit" : scc14["JerkUpperLimit"],
-      "JerkLowerLimit" : scc14["JerkLowerLimit"],
-      "SCCMode2" : scc14["SCCMode2"],
-      "ColRiskF" : scc14["ColRiskF"],
-      "ComfortBandUpper" : scc14["ComfortBandUpper"],
-      "ComfortBandLower" : scc14["ComfortBandLower"],
+      "JerkUpperLimit" : 0,
+      "JerkLowerLimit" : 0,
+      "SCCMode" : 0,
+      "ComfortBandUpper" : 0.24,
+      "ComfortBandLower" : 0.24,
     }
   return packer.make_can_msg("SCC14", 0, values)
 
