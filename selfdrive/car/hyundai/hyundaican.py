@@ -84,7 +84,7 @@ def create_scc11(packer, enabled, count):
   values = {
     "MainMode_ACC": enabled,
     "SCCInfoDisplay": 0,
-    "AliveCounterACC": count%16,
+    "AliveCounterACC": count,
     "VSetDis": 0,  # km/h velosity
     "ObjValid": objValid,
     "DriverAlertDisplay": 0,
