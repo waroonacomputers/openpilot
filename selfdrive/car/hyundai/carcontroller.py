@@ -167,7 +167,7 @@ class CarController():
       self.scc12_cnt += 1
 
     if (self.sccEmulation) and not frame % 20:
-      can_sends.append(create_scc13(self.packer, CS.scc13))
+      can_sends.append(create_scc13(self.packer))
 
     if CS.stopped:
       # run only first time when the car stopped
