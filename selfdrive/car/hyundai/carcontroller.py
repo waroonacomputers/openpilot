@@ -140,8 +140,8 @@ class CarController():
       self.scc11_cnt = 0
 
     self.lkas11_cnt %= 0x10
-    self.scc11_cnt %= 0xF
-    self.scc12_cnt %= 0xF
+    self.scc11_cnt %= 16
+    self.scc12_cnt %= 16
     self.clu11_cnt = frame % 0x10
     self.mdps12_cnt = frame % 0x100
 
