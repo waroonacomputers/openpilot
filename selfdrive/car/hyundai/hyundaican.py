@@ -116,7 +116,7 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
       "aReqMax": apply_accel if enabled else 0,
       "TakeOverReq": 0,
       "PreFill": 0,
-      "aReqMin": apply_accel if enabled else -10,
+      "aReqMin": apply_accel if enabled else -10.23,
       "CF_VSM_ConfMode": 0,
       "AEB_Failinfo": 0,
       "AEB_Status": 0,
@@ -176,8 +176,8 @@ def create_scc14(packer, enabled):
       "JerkUpperLimit" : 0,
       "JerkLowerLimit" : 0,
       "SCCMode" : 0,
-      "ComfortBandUpper" : 0.24,
-      "ComfortBandLower" : 0.24,
+      "ComfortBandUpper" : 0,
+      "ComfortBandLower" : 0,
     }
   return packer.make_can_msg("SCC14", 0, values)
 
