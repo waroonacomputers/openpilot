@@ -142,6 +142,7 @@ class CarController():
     self.lkas11_cnt %= 0x10
     self.scc11_cnt %= 16
     self.scc12_cnt %= 0xF
+    self.fca11_cnt %= 16
     self.clu11_cnt = frame % 0x10
     self.mdps12_cnt = frame % 0x100
 
@@ -159,16 +160,19 @@ class CarController():
       can_sends.append(create_mdps12(self.packer, self.car_fingerprint, self.mdps12_cnt, CS.mdps12))
     
     # 50 message per second
-    if not frame % 2: 
+    if not (frame % 2): 
       if ((not CS.scc_bus and self.longcontrol) or self.sccEmulation):
         if self.sccEmulation:
           can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
-          #can_sends.append(create_fca11(self.packer, self.scc11_cnt))
           self.scc11_cnt += 1
           can_sends.append(create_scc14(self.packer, enabled))
         can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
         self.scc12_cnt += 1                                                                                             #  ...SCC is not on bus 0 and longcontrol enabled
 
+    #25 Messages per second
+    if not (frame % 4):
+      #can_sends.append(create_fca11(self.packer, self.scc11_cnt))
+      self.fca11_cnt +=1
     # 5 message per second
     if not (frame % 20):
       if self.sccEmulation:

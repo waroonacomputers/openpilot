@@ -199,7 +199,7 @@ def create_fca11(packer, cnt):
     "FCA_StopReq": 0,
     "FCA_DrvSetStatus": 1,
     "CF_VSM_DecCmdAct": 0,
-    "FCA_Failinfo": 3,
+    "FCA_Failinfo": 0,
     "FCA_RelativeVelocity": 0,
     "FCA_TimetoCollision": 2540,
     "CR_FCA_Alive": cnt,
