@@ -187,27 +187,27 @@ def create_4a2SCC(packer):
   }
   return packer.make_can_msg("4a2SCC", 0, values)
 
-def create_fca11(packer, cnt):
-  values = {
-    "CF_VSM_Prefill": 0,
-    "CF_VSM_HBACmd": 0,
-    "CF_VSM_Warn": 0,
-    "CF_VSM_BeltCmd": 0,
-    "CR_VSM_DecCmd": 0,
-    "FCA_Status":2,
-    "FCA_CmdAct": 0,
-    "FCA_StopReq": 0,
-    "FCA_DrvSetStatus": 1,
-    "CF_VSM_DecCmdAct": 0,
-    "FCA_Failinfo": 0,
-    "FCA_RelativeVelocity": 0,
-    "FCA_TimetoCollision": 2540,
-    "CR_FCA_Alive": cnt,
-    "CR_FCA_ChkSum": 0,
-  }
-  dat = packer.make_can_msg("FCA11", 0, values)[2]
-  values["CR_FCA_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
-  return packer.make_can_msg("FCA11", 0, values)
+# def create_fca11(packer, cnt):
+#   values = {
+#     "CF_VSM_Prefill": 0,
+#     "CF_VSM_HBACmd": 0,
+#     "CF_VSM_Warn": 0,
+#     "CF_VSM_BeltCmd": 0,
+#     "CR_VSM_DecCmd": 0,
+#     "FCA_Status":2,
+#     "FCA_CmdAct": 0,
+#     "FCA_StopReq": 0,
+#     "FCA_DrvSetStatus": 1,
+#     "CF_VSM_DecCmdAct": 0,
+#     "FCA_Failinfo": 0,
+#     "FCA_RelativeVelocity": 0,
+#     "FCA_TimetoCollision": 2540,
+#     "CR_FCA_Alive": cnt,
+#     "CR_FCA_ChkSum": 0,
+#   }
+#   dat = packer.make_can_msg("FCA11", 0, values)[2]
+#   values["CR_FCA_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
+#   return packer.make_can_msg("FCA11", 0, values)
 
 def create_mdps12(packer, car_fingerprint, cnt, mdps12):
   values = {
