@@ -206,7 +206,7 @@ def create_fca11(packer, cnt):
     "CR_FCA_ChkSum": 0,
   }
   dat = packer.make_can_msg("FCA11", 0, values)[2]
-  values["CR_FCA_ChkSum"] = sum(dat) % 256
+  values["CR_FCA_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
   return packer.make_can_msg("FCA11", 0, values)
 
 def create_mdps12(packer, car_fingerprint, cnt, mdps12):
