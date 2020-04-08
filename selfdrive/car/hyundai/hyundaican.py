@@ -167,7 +167,7 @@ def create_scc14(packer, enabled):
     values = {
       "JerkUpperLimit" : 3.2,
       "JerkLowerLimit" : 0.1,
-      "SCCMode" : 1,
+      "SCCMode2" : 1,
       "ComfortBandUpper" : 0.24,
       "ComfortBandLower" : 0.24,
     }
@@ -175,7 +175,7 @@ def create_scc14(packer, enabled):
     values = {
       "JerkUpperLimit" : 0,
       "JerkLowerLimit" : 0,
-      "SCCMode" : 0,
+      "SCCMode2" : 0,
       "ComfortBandUpper" : 0,
       "ComfortBandLower" : 0,
     }
