@@ -1372,6 +1372,9 @@ BO_ 1290 SCC13: 8 SCC
  SG_ AebDrvSetStatus : 4|3@1+ (1,0) [0|7] "" CLU,ESC
  SG_ Lead_Veh_Dep_Alert_USM : 13|2@0+ (1,0) [0|3] "" XXX
 
+BO_ 1186 4a2SCC: 8 XXX
+ SG_ Paint_1 : 0|1@0+ (1,0) [0|1] "" XXX
+
 BO_ 1287 TCS15: 4 ESC
  SG_ ABS_W_LAMP : 0|1@1+ (1.0,0.0) [0.0|1.0] ""  _4WD,CLU,CUBIS,IBOX
  SG_ TCS_OFF_LAMP : 1|2@1+ (1.0,0.0) [0.0|1.0] ""  _4WD,ACU,CLU

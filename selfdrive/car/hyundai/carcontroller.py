@@ -4,6 +4,7 @@ from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, \
                                              create_scc11, create_scc12, \
                                              create_scc13, create_scc14, \
+                                             create_4a2SCC, create_fca11,  \
                                              create_mdps12
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR, FEATURES
 from opendbc.can.packer import CANPacker
@@ -157,17 +158,27 @@ class CarController():
       can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed, self.clu11_cnt))
     else: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
       can_sends.append(create_mdps12(self.packer, self.car_fingerprint, self.mdps12_cnt, CS.mdps12))
+    
+    # 50 message per second
+    if not frame % 2: 
+      if ((not CS.scc_bus and self.longcontrol) or self.sccEmulation):
+        if self.sccEmulation:
+          can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
+          can_sends.append(create_fca11(self.packer, self.scc11_cnt))
+          self.scc11_cnt += 1
+          can_sends.append(create_scc14(self.packer, enabled))
+        can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
+        self.scc12_cnt += 1                                                                                             #  ...SCC is not on bus 0 and longcontrol enabled
 
-    if ((CS.scc_bus and self.longcontrol) or self.sccEmulation) and frame % 2: # send scc12 to car if SCC not on bus 0 and longcontrol enabled
+    # 5 message per second
+    if not (frame % 20):
       if self.sccEmulation:
-        can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
-        self.scc11_cnt += 1
-        can_sends.append(create_scc14(self.packer, enabled))
-      can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))
-      self.scc12_cnt += 1
+        can_sends.append(create_scc13(self.packer))
 
-    if (self.sccEmulation) and not (frame % 20):
-      can_sends.append(create_scc13(self.packer))
+    # 2 messages per second
+    if not (frame % 50):
+      if (self.sccEmulation):
+        can_sends.append(create_4a2SCC(self.packer))
 
     if CS.stopped:
       # run only first time when the car stopped

@@ -5,12 +5,25 @@ const int HYUNDAI_MAX_RATE_UP = 3;
 const int HYUNDAI_MAX_RATE_DOWN = 7;
 const int HYUNDAI_DRIVER_TORQUE_ALLOWANCE = 50;
 const int HYUNDAI_DRIVER_TORQUE_FACTOR = 2;
-const AddrBus HYUNDAI_TX_MSGS[] = {{832, 0}, {832, 1}, {1265, 0}, {1265, 1}, {1265, 2}, {593, 2}, {1057, 0}, {1056, 0}, {1290, 0}, {905, 0}};
+const AddrBus HYUNDAI_TX_MSGS[] = {
+  /* This defines what messages are allowed to be sent, and to which bus (aka wire). */
+  {832, 0},  //   LKAS11, Bus 0
+  {832, 1},  //   LKAS11, Bus 1
+  {1265, 0}, //   CLU11,  Bus 0
+  {1265, 1}, //   CLU11,  Bus 1
+  {1265, 2}, //   CLU11,  Bus 2
+  {593, 2},  //   MDPS12, Bus 2
+  {1056, 0}, //   SCC11,  Bus 0
+  {1057, 0}, //   SCC12,  Bus 0
+  {1290, 0}, //   SCC13,  Bus 0
+  {905, 0},  //   SCC14,  Bus 0
+  {909, 0},  //   FCA11,  Bus 0
+  {1186, 0}  //   4a2SCC, Bus 0
+  };
 
 // TODO: do checksum and counter checks
 AddrCheckStruct hyundai_rx_checks[] = {
-  {.addr = {593}, .bus = 0, .expected_timestep = 20000U},
-  {.addr = {1057}, .bus = 0, .expected_timestep = 20000U},
+  {.addr = {593}, .bus = 0, .expected_timestep = 20000U}
 };
 const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
 
