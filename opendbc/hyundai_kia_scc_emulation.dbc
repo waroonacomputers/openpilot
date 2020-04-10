@@ -187,27 +187,31 @@ BO_ 1434 PSB11: 2 PSB
  SG_ PSB_RH_ACT : 11|4@1+ (1.0,0.0) [0.0|4.0] ""  Dummy
 
 BO_ 916 TCS13: 8 ESC
- SG_ aBasis : 0|11@1+ (0.01,-10.23) [-10.23|10.24] "m/s^2"  EMS,SCC
- SG_ BrakeLight : 11|1@1+ (1.0,0.0) [0.0|1.0] ""  CLU,EMS,SCC
- SG_ DCEnable : 12|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS,SCC
- SG_ AliveCounterTCS : 13|3@1+ (1.0,0.0) [0.0|7.0] ""  EMS,SCC
- SG_ ACCReqLim : 22|2@1+ (1.0,0.0) [0.0|3.0] ""  EMS,SCC
- SG_ TQI_ACC : 24|8@1+ (0.390625,0.0) [0.0|99.609375] "%"  EMS
- SG_ ACCEL_REF_ACC : 32|11@1+ (0.01,-10.23) [-10.23|10.24] "m/s^2"  EMS,SCC
- SG_ ACCEnable : 43|2@1+ (1.0,0.0) [0.0|3.0] ""  EMS,SCC
- SG_ DriverOverride : 45|2@1+ (1.0,0.0) [0.0|3.0] ""  EMS,SCC
- SG_ StandStill : 47|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS,SCC
- SG_ CheckSum_TCS3 : 48|4@1+ (1.0,0.0) [0.0|15.0] ""  EMS,SCC
- SG_ ACC_EQUIP : 52|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS,SCC
- SG_ PBRAKE_ACT : 53|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS,SCC
- SG_ ACC_REQ : 54|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS
- SG_ DriverBraking : 55|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS,SCC
- SG_ CF_VSM_Coded : 56|1@1+ (1.0,0.0) [0.0|1.0] ""  SCC
- SG_ CF_VSM_Avail : 57|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU,SCC
- SG_ CF_VSM_Handshake : 59|1@1+ (1.0,0.0) [0.0|1.0] ""  SCC
- SG_ CF_DriBkeStat : 60|1@1+ (1.0,0.0) [0.0|1.0] ""  SCC
- SG_ CF_VSM_ConfSwi : 61|2@1+ (1.0,0.0) [0.0|3.0] ""  SCC
- SG_ AEB_EQUIP : 63|1@1+ (1.0,0.0) [0.0|1.0] ""  SCC
+ SG_ aBasis : 0|11@1+ (0.01,-10.23) [-10.23|10.24] "m/s^2" EMS,SCC
+ SG_ BrakeLight : 11|1@1+ (1,0) [0|1] "" CLU,EMS,SCC
+ SG_ DCEnable : 12|1@1+ (1,0) [0|1] "" EMS,SCC
+ SG_ AliveCounterTCS : 13|3@1+ (1,0) [0|7] "" EMS,SCC
+ SG_ Pre_TCS_CTL : 16|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EBA_ACK : 17|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ FCA_ACK : 18|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DF_BF_STAT : 19|2@1+ (1,0) [0|3] "" BCW
+ SG_ SCCReqLim : 21|2@1+ (1,0) [0|3] "" SCC
+ SG_ TQI_SCC : 23|9@1+ (0.390625,0) [0|199.609375] "%" Vector__XXX
+ SG_ ACCEL_REF_ACC : 32|11@1+ (0.01,-10.23) [-10.23|10.24] "m/s^2" EMS,SCC
+ SG_ ACCEnable : 43|2@1+ (1,0) [0|3] "" EMS,SCC
+ SG_ DriverOverride : 45|2@1+ (1,0) [0|3] "" EMS,SCC
+ SG_ StandStill : 47|1@1+ (1,0) [0|1] "" EMS,SCC
+ SG_ CheckSum_TCS3 : 48|4@1+ (1,0) [0|15] "" EMS,SCC
+ SG_ ACC_EQUIP : 52|1@1+ (1,0) [0|1] "" EMS,SCC
+ SG_ PBRAKE_ACT : 53|1@1+ (1,0) [0|1] "" EMS,SCC
+ SG_ ACC_REQ : 54|1@1+ (1,0) [0|1] "" EMS
+ SG_ DriverBraking : 55|1@1+ (1,0) [0|1] "" EMS,SCC
+ SG_ CF_VSM_Coded : 56|1@1+ (1,0) [0|1] "" SCC
+ SG_ CF_VSM_Avail : 57|2@1+ (1,0) [0|3] "" CLU,SCC
+ SG_ CF_VSM_Handshake : 59|1@1+ (1,0) [0|1] "" SCC
+ SG_ CF_DriBkeStat : 60|1@1+ (1,0) [0|1] "" SCC
+ SG_ CF_VSM_ConfSwi : 61|2@1+ (1,0) [0|3] "" SCC
+ SG_ AEB_EQUIP : 63|1@1+ (1,0) [0|1] "" SCC
 
 BO_ 1427 TPMS11: 6 BCM
  SG_ TPMS_W_LAMP : 0|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU,CUBIS,HUD,IBOX,CLU,CUBIS,HUD,IBOX
