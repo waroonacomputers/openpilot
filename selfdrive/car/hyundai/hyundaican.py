@@ -98,7 +98,7 @@ def create_scc11(packer, bus, enabled, count):
     "ACC_ObjLatPos":0,
     "ACC_ObjRelSpd":0,
   }
-  return packer.make_can_msg("SCC11", 1, values)
+  return packer.make_can_msg("SCC11", bus, values)
 
 def create_scc12(packer, bus, apply_accel, enabled, cnt, sccEmulation, scc12):
   if sccEmulation:
