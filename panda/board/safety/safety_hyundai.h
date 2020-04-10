@@ -13,13 +13,13 @@ const AddrBus HYUNDAI_TX_MSGS[] = {
   {1265, 1}, //   CLU11,  Bus 1
   {1265, 2}, //   CLU11,  Bus 2
   {593, 2},  //   MDPS12, Bus 2
-  {1056, 0}, //   SCC11,  Bus 0
-  {1057, 0}, //   SCC12,  Bus 0
-  {1290, 0}, //   SCC13,  Bus 0
-  {905, 0},  //   SCC14,  Bus 0
+  {1056, 1}, //   SCC11,  Bus 1
+  {1057, 1}, //   SCC12,  Bus 0
+  {1290, 1}, //   SCC13,  Bus 0
+  {905, 1},  //   SCC14,  Bus 0
 //{909, 0},  //   FCA11,  Bus 0
-  {1186, 0}, //   4a2SCC, Bus 0
-  {916, 0}   //   TCS13, Bus 0
+  {1186, 1}, //   4a2SCC, Bus 0
+  //{916, 0}   //   TCS13, Bus 0
   };
 
 // TODO: do checksum and counter checks
