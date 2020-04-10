@@ -68,31 +68,31 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       update_sample(&hyundai_torque_driver, torque_driver_new);
     }
 
-    // enter controls on rising edge of ACC, exit controls on ACC off
-    if (addr == 1057 && OP_SCC_live && (bus != 1 || !hyundai_LCAN_on_bus1)) { // for cars with long control
-      hyundai_has_scc = true;
-      // 2 bits: 13-14
-      int cruise_engaged = (GET_BYTES_04(to_push) >> 13) & 0x3;
-      if (cruise_engaged && !hyundai_cruise_engaged_last) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 0;
-      }
-      hyundai_cruise_engaged_last = cruise_engaged;
-    }
-    if (addr == 1056 && !OP_SCC_live && (bus != 1 || !hyundai_LCAN_on_bus1)) { // for cars without long control
-      hyundai_has_scc = true;
-      // 2 bits: 13-14
-      int cruise_engaged = GET_BYTES_04(to_push) & 0x1; // ACC main_on signal
-      if (cruise_engaged && !hyundai_cruise_engaged_last) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 1;
-      }
-      hyundai_cruise_engaged_last = cruise_engaged;
-    }
+    // // enter controls on rising edge of ACC, exit controls on ACC off
+    // if (addr == 1057 && OP_SCC_live && (bus != 1 || !hyundai_LCAN_on_bus1)) { // for cars with long control
+    //   hyundai_has_scc = true;
+    //   // 2 bits: 13-14
+    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 13) & 0x3;
+    //   if (cruise_engaged && !hyundai_cruise_engaged_last) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   hyundai_cruise_engaged_last = cruise_engaged;
+    // }
+    // if (addr == 1056 && !OP_SCC_live && (bus != 1 || !hyundai_LCAN_on_bus1)) { // for cars without long control
+    //   hyundai_has_scc = true;
+    //   // 2 bits: 13-14
+    //   int cruise_engaged = GET_BYTES_04(to_push) & 0x1; // ACC main_on signal
+    //   if (cruise_engaged && !hyundai_cruise_engaged_last) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 1;
+    //   }
+    //   hyundai_cruise_engaged_last = cruise_engaged;
+    // }
     // cruise control for car without SCC
     if (addr == 871 && !hyundai_has_scc && OP_SCC_live) {
       // first byte
@@ -250,12 +250,7 @@ static int hyundai_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
     }
     if (bus_num == 1 && hyundai_forward_bus1) {
       if (!OP_MDPS_live || addr != 593) {
-        if (!OP_SCC_live || addr != 1057) {
-          bus_fwd = 20;
-        } else {
-          bus_fwd = 2;  // EON create SCC12 for Car
-          OP_SCC_live -= 1;
-        }
+        bus_fwd = 20;
       } else {
         bus_fwd = 0;  // EON create MDPS for LKAS
         OP_MDPS_live -= 1;
@@ -263,12 +258,7 @@ static int hyundai_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
     }
     if (bus_num == 2) {
       if (addr != 832 || !OP_LKAS_live) {
-        if ((addr != 1057) || (!OP_SCC_live)) {
-          bus_fwd = hyundai_forward_bus1 ? 10 : 0;
-        } else {
-          bus_fwd = fwd_to_bus1;  // EON create SCC12 for Car
-          OP_SCC_live -= 1;
-        }
+        bus_fwd = 20;
       } else if (!hyundai_mdps_bus) {
         bus_fwd = fwd_to_bus1; // EON create LKAS for Car
         OP_LKAS_live -= 1; 
