@@ -102,6 +102,32 @@ def get_can_parser(CP):
     signals += [
       ("CRUISE_LAMP_M", "EMS16", 0),
       ("CF_Lvr_CruiseSet", "LVR12", 0),
+      # this probably wont work but i can try
+      ("aBasis", "TCS13",0),
+      ("BrakeLight", "TCS13",0),
+      ("DCEnable", "TCS13",0),
+      ("AliveCounterTCS", "TCS13",0),
+      ("Pre_TCS_CTL", "TCS13",0),
+      ("EBA_ACK", "TCS13",0),
+      ("FCA_ACK", "TCS13",0),
+      ("DF_BF_STAT", "TCS13",0),
+      ("SCCReqLim", "TCS13",0),
+      ("TQI_SCC", "TCS13",0),
+      ("ACCEL_REF_ACC", "TCS13",0),
+      ("ACCEnable", "TCS13",0),
+      ("DriverOverride", "TCS13",0),
+      ("StandStill", "TCS13",0),
+      ("CheckSum_TCS3", "TCS13",0),
+      ("ACC_EQUIP", "TCS13",0),
+      ("PBRAKE_ACT", "TCS13",0),
+      ("ACC_REQ", "TCS13",0),
+      ("DriverBraking", "TCS13",0),
+      ("CF_VSM_Coded", "TCS13",0),
+      ("CF_VSM_Avail", "TCS13",0),
+      ("CF_VSM_Handshake", "TCS13",0),
+      ("CF_DriBkeStat", "TCS13",0),
+      ("CF_VSM_ConfSwi", "TCS13",0),
+      ("AEB_EQUIP", "TCS13",0),
     ]
   if not CP.sccBus:
     if CP.carFingerprint not in FEATURES["use_scc_emulation"]:
@@ -420,5 +446,6 @@ class CarState(CarStateBase):
     # save the entire LKAS11, CLU11, SCC12 and MDPS12
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
+    self.tcs13 = cp.vl["TCS13"]
     self.scc12 = cp_scc.vl["SCC12"]
     self.mdps12 = cp_mdps.vl["MDPS12"]

@@ -4,7 +4,7 @@ from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, \
                                              create_scc11, create_scc12, \
                                              create_scc13, create_scc14, \
-                                             create_4a2SCC, create_mdps12#,create_fca11
+                                             create_tcs13, create_4a2SCC, create_mdps12#,create_fca11
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR, FEATURES
 from opendbc.can.packer import CANPacker
 
@@ -165,6 +165,7 @@ class CarController():
       if ((not CS.scc_bus and self.longcontrol) or self.sccEmulation):
         if self.sccEmulation:
           can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
+          can_sends.append(create_tcs13(self.packer,self.tcs13, self.scc11_cnt, self.sccEmulation, enabled, CS.brake_pressed, CS.a_ego))
           self.scc11_cnt += 1
           can_sends.append(create_scc14(self.packer, enabled))
         can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or

@@ -187,6 +187,37 @@ def create_4a2SCC(packer):
   }
   return packer.make_can_msg("4a2SCC", 0, values)
 
+def create_tcs13(packer, tcs13, count, sccEmulation, enabled, is_scc_braking,a_ego):
+  values = {
+      "aBasis" :  0 if enabled else tcs13["aBasis"],
+      "BrakeLight" : 1 if is_scc_braking else 0,
+      "DCEnable" : 1 if is_scc_braking else 0,
+      "Pre_TCS_CTL" : tcs13["Pre_TCS_CTL"],
+      "EBA_ACK" : tcs13["EBA_ACK"],
+      "FCA_ACK" : tcs13["FCA_ACK"],
+      "DF_BF_STAT" : tcs13["DF_BF_STAT"],
+      "SCCReqLim" : tcs13["SCCReqLim"],
+      "TQI_SCC" : tcs13["TQI_SCC"],
+      "ACCEL_REF_ACC" : a_ego,
+      "ACCEnable" : tcs13["ACCEnable"],
+      "DriverOverride" : tcs13["DriverOverride"],
+      "StandStill" : tcs13["StandStill"],
+      "ACC_EQUIP" : 1,
+      "PBRAKE_ACT" : tcs13["PBRAKE_ACT"],
+      "ACC_REQ" : 1 if enabled else 0,
+      "DriverBraking" : tcs13["DriverBraking"],
+      "CF_VSM_Coded" : tcs13["CF_VSM_Coded"],
+      "CF_VSM_Avail" : tcs13["CF_VSM_Avail"],
+      "CF_VSM_Handshake" : tcs13["CF_VSM_Handshake"],
+      "CF_DriBkeStat" : tcs13["CF_DriBkeStat"],
+      "CF_VSM_ConfSwi" : tcs13["CF_VSM_ConfSwi"],
+      "AEB_EQUIP" : tcs13["AEB_EQUIP"],
+      "AliveCounterTCS" : count,
+      "CheckSum_TCS3" : 0,
+    }
+  dat = packer.make_can_msg("TCS13", 0, values)[2]
+  values["CheckSum_TCS3"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
+
 # def create_fca11(packer, cnt):
 #   values = {
 #     "CF_VSM_Prefill": 0,
