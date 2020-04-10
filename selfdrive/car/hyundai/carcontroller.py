@@ -164,11 +164,17 @@ class CarController():
     if not (frame % 2): 
       if ((not CS.scc_bus and self.longcontrol) or self.sccEmulation):
         if self.sccEmulation:
-          can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
+          can_sends.append(create_scc11(self.packer, 0, enabled, self.scc11_cnt))
+          can_sends.append(create_scc11(self.packer, 1, enabled, self.scc11_cnt))
+          can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt))
           #can_sends.append(create_tcs13(self.packer, CS.tcs13, self.scc11_cnt, self.sccEmulation, enabled, CS.brake_pressed, CS.a_ego))
           self.scc11_cnt += 1
-          can_sends.append(create_scc14(self.packer, enabled))
-        can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
+          can_sends.append(create_scc14(self.packer, 0, enabled))
+          can_sends.append(create_scc14(self.packer, 1, enabled))
+          can_sends.append(create_scc14(self.packer, 2, enabled))
+        can_sends.append(create_scc12(self.packer, 0, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
+        can_sends.append(create_scc12(self.packer, 1, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
+        can_sends.append(create_scc12(self.packer, 2, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
         self.scc12_cnt += 1                                                                                             #  ...SCC is not on bus 0 and longcontrol enabled
 
     #25 Messages per second
@@ -178,12 +184,16 @@ class CarController():
     # 5 message per second
     if not (frame % 20):
       if self.sccEmulation:
-        can_sends.append(create_scc13(self.packer))
+        can_sends.append(create_scc13(self.packer, 0))
+        can_sends.append(create_scc13(self.packer, 1))
+        can_sends.append(create_scc13(self.packer, 2))
 
     # 2 messages per second
     if not (frame % 50):
       if (self.sccEmulation):
-        can_sends.append(create_4a2SCC(self.packer))
+        can_sends.append(create_4a2SCC(self.packer, 0))
+        can_sends.append(create_4a2SCC(self.packer, 1))
+        can_sends.append(create_4a2SCC(self.packer, 2))
 
     if CS.stopped:
       # run only first time when the car stopped

@@ -73,7 +73,7 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
 
   return packer.make_can_msg("CLU11", bus, values)
 
-def create_scc11(packer, enabled, count):
+def create_scc11(packer, bus, enabled, count):
   objValid = 0
   objStatus = 0
   objDist = 150
@@ -100,7 +100,7 @@ def create_scc11(packer, enabled, count):
   }
   return packer.make_can_msg("SCC11", 1, values)
 
-def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
+def create_scc12(packer, bus, apply_accel, enabled, cnt, sccEmulation, scc12):
   if sccEmulation:
     values = {
       "CF_VSM_Prefill": 0,
@@ -149,20 +149,20 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
       "CR_VSM_Alive": cnt,
       "CR_VSM_ChkSum": 0,
     }
-  dat = packer.make_can_msg("SCC12", 1, values)[2]
+  dat = packer.make_can_msg("SCC12", bus, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
 
-  return packer.make_can_msg("SCC12", 1, values)
+  return packer.make_can_msg("SCC12", bus, values)
 
-def create_scc13(packer):
+def create_scc13(packer,bus):
   values = {
     "SCCDrvModeRValue" : 2,
     "SCC_Equip" : 1,
     "AebDrvSetStatus" : 0,
   }
-  return packer.make_can_msg("SCC13", 1, values)
+  return packer.make_can_msg("SCC13", bus, values)
 
-def create_scc14(packer, enabled):
+def create_scc14(packer, bus, enabled):
   if enabled:
     values = {
       "JerkUpperLimit" : 3.2,
@@ -179,13 +179,13 @@ def create_scc14(packer, enabled):
       "ComfortBandUpper" : 0,
       "ComfortBandLower" : 0,
     }
-  return packer.make_can_msg("SCC14", 1, values)
+  return packer.make_can_msg("SCC14", bus, values)
 
-def create_4a2SCC(packer):
+def create_4a2SCC(packer, bus):
   values = {
     "Paint_1": 1
   }
-  return packer.make_can_msg("4a2SCC", 1, values)
+  return packer.make_can_msg("4a2SCC", bus, values)
 
 # def create_tcs13(packer, tcs13, count, sccEmulation, enabled, is_scc_braking,a_ego):
 #   values = {
