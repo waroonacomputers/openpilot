@@ -57,6 +57,7 @@ class CarController():
     self.packer = CANPacker(dbc_name)
     self.steer_rate_limited = False
     self.resume_cnt = 0
+    self.accel_steady = 0.
     self.last_resume_frame = 0
     self.last_lead_distance = 0
     self.scc11_cnt = 0
