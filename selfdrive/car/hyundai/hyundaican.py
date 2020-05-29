@@ -30,7 +30,7 @@ def create_scc11(packer, enabled, count):
   }
   return packer.make_can_msg("SCC11", 0, values)
 
-def create_scc12(packer, apply_accel, enabled, cnt, scc12):
+def create_scc12(packer, apply_accel, enabled, cnt):
   values = {
     "CF_VSM_Prefill": 0,
     "CF_VSM_DecCmdAct": 0,
