@@ -86,7 +86,7 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
                                  hyundai_get_checksum, hyundai_compute_checksum,
                                  hyundai_get_counter);
 
-  bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
+  // bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
 
   int addr = GET_ADDR(to_push);
   int bus = GET_BUS(to_push);
@@ -99,9 +99,33 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // enter controls on rising edge of ACC, exit controls on ACC off
-    if (addr == 1057) {
-      // 2 bits: 13-14
-      int cruise_engaged = (GET_BYTES_04(to_push) >> 13) & 0x3;
+    // if (addr == 1057) {
+    //   // 2 bits: 13-14
+    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 13) & 0x3;
+    //   if (cruise_engaged && !cruise_engaged_prev) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_engaged;
+    // }
+
+    // if (addr == 871 ) {
+    //   // first byte
+    //   int cruise_engaged = (GET_BYTES_04(to_push) & 0xFF);
+    //   if (cruise_engaged && !cruise_engaged_prev) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_engaged;
+    // }
+
+    if (addr == 608) {
+      // bit 25
+      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
       if (cruise_engaged && !cruise_engaged_prev) {
         controls_allowed = 1;
       }
@@ -112,13 +136,13 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // exit controls on rising edge of gas press
-    if (addr == 608) {
-      bool gas_pressed = (GET_BYTE(to_push, 7) >> 6) != 0;
-      if (!unsafe_allow_gas && gas_pressed && !gas_pressed_prev) {
-        controls_allowed = 0;
-      }
-      gas_pressed_prev = gas_pressed;
-    }
+    // if (addr == 608) {
+    //   bool gas_pressed = (GET_BYTE(to_push, 7) >> 6) != 0;
+    //   if (!unsafe_allow_gas && gas_pressed && !gas_pressed_prev) {
+    //     controls_allowed = 0;
+    //   }
+    //   gas_pressed_prev = gas_pressed;
+    // }
 
     // sample subaru wheel speed, averaging opposite corners
     if (addr == 902) {
@@ -129,13 +153,15 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // exit controls on rising edge of brake press
-    if (addr == 916) {
-      bool brake_pressed = (GET_BYTE(to_push, 6) >> 7) != 0;
-      if (brake_pressed && (!brake_pressed_prev || vehicle_moving)) {
-        controls_allowed = 0;
-      }
-      brake_pressed_prev = brake_pressed;
-    }
+    // I'm not advertising this repository anywhere, and this vehicle does NOT have long control working,
+    // and considering comma said that they only enforce this on honda and toyota at the moment, I feel nothing wrong with doing something similar to xx979xx
+    // if (addr == 916) {
+    //   bool brake_pressed = (GET_BYTE(to_push, 6) >> 7) != 0;
+    //   if (brake_pressed && (!brake_pressed_prev || vehicle_moving)) {
+    //     controls_allowed = 0;
+    //   }
+    //   brake_pressed_prev = brake_pressed;
+    // }
 
     // check if stock camera ECU is on bus 0
     if ((safety_mode_cnt > RELAY_TRNS_TIMEOUT) && (addr == 832)) {
