@@ -129,7 +129,7 @@ class CarController():
       self.scc11_cnt += 1
       self.scc12_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
-      #can_sends.append(create_scc12(self.packer,apply_accel, enabled, self.scc12_cnt))
+      can_sends.append(create_scc12(self.packer,apply_accel, enabled, self.scc12_cnt))
       can_sends.append(create_scc14(self.packer, enabled))
       #cloudlog.info("create_scc14(self.packer, %d)" % (enabled))
       
