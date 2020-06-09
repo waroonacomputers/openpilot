@@ -16,7 +16,11 @@ const CanMsg HYUNDAI_TX_MSGS[] = {
   {905, 0, 8},  //   SCC14,  Bus 0
   {1186, 0, 2}  //   4a2SCC, Bus 0
  };
-
+AddrCheckStruct hyundai_rx_checks[] = {
+  {.addr = {593}, .bus = 0, .expected_timestep = 20000U},
+  {.addr = {1057}, .bus = 0, .expected_timestep = 20000U},
+};
+const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
 // TODO: missing checksum for wheel speeds message,worst failure case is
 //       wheel speeds stuck at 0 and we don't disengage on brake press
 
@@ -250,5 +254,5 @@ const safety_hooks hyundai_hooks = {
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = hyundai_fwd_hook,
   .addr_check = hyundai_rx_checks,
-  .addr_check_len = 1,
+  .addr_check_len = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]),
 };
