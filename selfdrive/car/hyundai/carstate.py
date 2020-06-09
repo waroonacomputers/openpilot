@@ -205,24 +205,20 @@ class CarState(CarStateBase):
       ("EMS16", 100),
     ]
 
-    if not CP.openpilotLongitudinalControl:
-      signals += [
-        ("CRUISE_LAMP_M", "EMS16", 0),
-        ("CF_Lvr_CruiseSet", "LVR12", 0),
-        # ("Vision_ObjDist_Low","V_OptData_739", 0),
-      ]
-    else:
-      signals += [
-      ("MainMode_ACC", "SCC11", 0),
-      ("VSetDis", "SCC11", 0),
-      ("SCCInfoDisplay", "SCC11", 0),
-      ("ACC_ObjDist", "SCC11", 0),
-      ("ACCMode", "SCC12", 1),
-      ]
-      checks += [
-        ("SCC11", 50),
-        ("SCC12", 50),
-      ]
+    signals += [
+      ("CRUISE_LAMP_M", "EMS16", 0),
+      ("CF_Lvr_CruiseSet", "LVR12", 0),
+      # ("Vision_ObjDist_Low","V_OptData_739", 0),
+    ]
+
+    signals += [
+    ("MainMode_ACC", "SCC11", 0),
+    ("VSetDis", "SCC11", 0),
+    ("SCCInfoDisplay", "SCC11", 0),
+    ("ACC_ObjDist", "SCC11", 0),
+    ("ACCMode", "SCC12", 1),
+    ]
+
     if CP.carFingerprint in FEATURES["use_cluster_gears"]:
       signals += [
         ("CF_Clu_InhibitD", "CLU15", 0),

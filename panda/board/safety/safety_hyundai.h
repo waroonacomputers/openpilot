@@ -11,10 +11,10 @@ const AddrBus HYUNDAI_TX_MSGS[] = {{832, 0}, {1265, 0}, {1157, 0}};
 // TODO: do checksum checks
 AddrCheckStruct hyundai_rx_checks[] = {
   {.addr = {608}, .bus = 0, .max_counter = 3U, .expected_timestep = 10000U},
-  {.addr = {897}, .bus = 0, .max_counter = 255U, .expected_timestep = 10000U},
-  {.addr = {902}, .bus = 0, .max_counter = 3U,  .expected_timestep = 10000U},
+  // {.addr = {897}, .bus = 0, .max_counter = 255U, .expected_timestep = 10000U},
+  // {.addr = {902}, .bus = 0, .max_counter = 3U,  .expected_timestep = 10000U},
   {.addr = {916}, .bus = 0, .max_counter = 7U, .expected_timestep = 10000U},
-  {.addr = {1057}, .bus = 0, .max_counter = 15U, .expected_timestep = 20000U},
+  // {.addr = {1057}, .bus = 0, .max_counter = 15U, .expected_timestep = 20000U},
 };
 const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
 
@@ -80,17 +80,17 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     //   cruise_engaged_prev = cruise_engaged;
     // }
 
-    if (addr == 608) {
-      // bit 25
-      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
-      if (cruise_engaged && !cruise_engaged_prev) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 0;
-      }
-      cruise_engaged_prev = cruise_engaged;
-    }
+    // if (addr == 608) {
+    //   // bit 25
+    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
+    //   if (cruise_engaged && !cruise_engaged_prev) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_engaged;
+    // }
 
     // exit controls on rising edge of gas press
     // if (addr == 608) {
@@ -102,12 +102,12 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     // }
 
     // sample subaru wheel speed, averaging opposite corners
-    if (addr == 902) {
-      int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
-      hyundai_speed += (GET_BYTES_48(to_push) >> 16) & 0x3FFF;  // RL
-      hyundai_speed /= 2;
-      vehicle_moving = hyundai_speed > HYUNDAI_STANDSTILL_THRSLD;
-    }
+    // if (addr == 902) {
+    //   int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
+    //   hyundai_speed += (GET_BYTES_48(to_push) >> 16) & 0x3FFF;  // RL
+    //   hyundai_speed /= 2;
+    //   vehicle_moving = hyundai_speed > HYUNDAI_STANDSTILL_THRSLD;
+    // }
 
     // exit controls on rising edge of brake press
     // I'm not advertising this repository anywhere, and this vehicle does NOT have long control working,
@@ -208,10 +208,10 @@ static int hyundai_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   int addr = GET_ADDR(to_fwd);
   // forward cam to ccan and viceversa, except lkas cmd
   if (!relay_malfunction) {
-    if (bus_num == 0) {
+    if (bus_num == 0 && (addr != 1057) && (addr != 1056) && (addr != 1290) && (addr != 905)) {
       bus_fwd = 2;
     }
-    if ((bus_num == 2) && (addr != 832) && (addr != 1157)) {
+    if ((bus_num == 2) && (addr != 832)) {
       bus_fwd = 0;
     }
   }

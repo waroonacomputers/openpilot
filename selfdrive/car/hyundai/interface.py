@@ -22,7 +22,7 @@ class CarInterface(CarInterfaceBase):
 
     # Hyundai port is a community feature for now
     ret.communityFeature = True
-    ret.openpilotLongitudinalControl = any([1056 in fingerprint[0], 1056 in fingerprint[1], 1056 in fingerprint[2]])
+    #ret.openpilotLongitudinalControl = any([1056 in fingerprint[0], 1056 in fingerprint[1], 1056 in fingerprint[2]])
 
     ret.steerActuatorDelay = 0.1  # Default delay
     ret.steerRateCost = 0.5
@@ -160,7 +160,7 @@ class CarInterface(CarInterfaceBase):
     self.cp_cam.update_strings(can_strings)
 
     ret = self.CS.update(self.cp, self.cp_cam)
-    ret.canValid = self.cp.can_valid and self.cp_cam.can_valid
+    ret.canValid = self.cp.can_valid
 
     # TODO: button presses
     ret.buttonEvents = []
