@@ -1,4 +1,5 @@
 from cereal import car
+from common.numpy_fast import clip
 from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_scc11, create_scc12, create_scc13, create_scc14
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
@@ -6,6 +7,25 @@ from opendbc.can.packer import CANPacker
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
+# Accel limits
+ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
+ACCEL_MAX = 1.5  # 1.5 m/s2
+ACCEL_MIN = -3.0  # 3   m/s2
+ACCEL_SCALE = max(ACCEL_MAX, -ACCEL_MIN)
+
+def accel_hysteresis(accel, accel_steady, enabled):
+
+  # for small accel oscillations within ACCEL_HYST_GAP, don't change the accel command
+  if not enabled:
+    # send 0 when disabled, otherwise acc faults
+    accel_steady = 0.
+  elif accel > accel_steady + ACCEL_HYST_GAP:
+    accel_steady = accel - ACCEL_HYST_GAP
+  elif accel < accel_steady - ACCEL_HYST_GAP:
+    accel_steady = accel + ACCEL_HYST_GAP
+  accel = accel_steady
+
+  return accel, accel_steady
 
 def process_hud_alert(enabled, fingerprint, visual_alert, left_lane,
                       right_lane, left_lane_depart, right_lane_depart):
@@ -56,6 +76,9 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
 
+    apply_accel = actuators.gas - actuators.brake
+    apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady, enabled)
+    apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
     # disable if steer angle reach 90 deg, otherwise mdps fault in some models
     lkas_active = enabled and abs(CS.out.steeringAngle) < 90.
 
@@ -109,7 +132,7 @@ class CarController():
       can_sends.append(create_scc13(self.packer))
     # if frame % 50 == 0:
     #   can_sends.append(create_4a2SCC(self.packer))
-    20 Hz LFA MFA message
+    #20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in [CAR.SONATA, CAR.PALISADE]:
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))
 
