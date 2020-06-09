@@ -37,8 +37,6 @@ static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
     cnt = ((GET_BYTE(to_push, 3) >> 6) << 2) | (GET_BYTE(to_push, 1) >> 6);
   } else if (addr == 916) {
     cnt = (GET_BYTE(to_push, 1) >> 5) & 0x7;
-  } else if (addr == 1057) {
-    cnt = GET_BYTE(to_push, 7) & 0xF;
   } else {
     cnt = 0;
   }
@@ -53,8 +51,6 @@ static uint8_t hyundai_get_checksum(CAN_FIFOMailBox_TypeDef *to_push) {
     chksum = GET_BYTE(to_push, 7) & 0xF;
   } else if (addr == 916) {
     chksum = GET_BYTE(to_push, 6) & 0xF;
-  } else if (addr == 1057) {
-    chksum = GET_BYTE(to_push, 7) >> 4;
   } else {
     chksum = 0;
   }
@@ -78,9 +74,7 @@ static uint8_t hyundai_compute_checksum(CAN_FIFOMailBox_TypeDef *to_push) {
 
 static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
-  bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN,
-                                 hyundai_get_checksum, hyundai_compute_checksum,
-                                 hyundai_get_counter);
+  bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN, NULL, NULL, NULL);
 
   // bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
 
