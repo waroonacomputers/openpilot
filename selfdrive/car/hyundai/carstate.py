@@ -41,13 +41,13 @@ class CarState(CarStateBase):
     #self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
     #                                  (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
     ret.cruiseState.available = True
-    ret.cruiseState.enabled = (cp.vl["SCC12"]['ACCMode'] != 0) if self.CP.openpilotLongitudinalControl else cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
-    ret.cruiseState.standstill = (cp.vl["SCC11"]['SCCInfoDisplay'] == 4.) if self.CP.openpilotLongitudinalControl else (not ret.vEgoRaw > 0.1)
+    ret.cruiseState.enabled = cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
+    ret.cruiseState.standstill = (not ret.vEgoRaw > 0.1)
 
     if ret.cruiseState.enabled:
       is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
       speed_conv = CV.MPH_TO_MS if is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed = cp.vl["SCC11"]['VSetDis'] * speed_conv if self.CP.openpilotLongitudinalControl else (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+      ret.cruiseState.speed = (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
     else:
       ret.cruiseState.speed = 0
 
@@ -118,7 +118,7 @@ class CarState(CarStateBase):
     self.clu11 = cp.vl["CLU11"]
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
     self.steer_state = cp.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
-    self.lead_distance = cp.vl["SCC11"]['ACC_ObjDist'] if self.CP.openpilotLongitudinalControl else 20
+    self.lead_distance = 20
 
     return ret
 
@@ -178,11 +178,6 @@ class CarState(CarStateBase):
       ("SAS_Angle", "SAS11", 0),
       ("SAS_Speed", "SAS11", 0),
 
-      ("MainMode_ACC", "SCC11", 0),
-      ("VSetDis", "SCC11", 0),
-      ("SCCInfoDisplay", "SCC11", 0),
-      ("ACC_ObjDist", "SCC11", 0),
-      ("ACCMode", "SCC12", 1),
 
       ("PV_AV_CAN", "EMS12", 0),
       ("CF_Ems_AclAct", "EMS16", 0),
@@ -199,8 +194,6 @@ class CarState(CarStateBase):
       ("CGW4", 5),
       ("WHL_SPD11", 50),
       ("SAS11", 100),
-      ("SCC11", 50),
-      ("SCC12", 50),
       ("EMS12", 100),
       ("EMS16", 100),
     ]
@@ -209,14 +202,6 @@ class CarState(CarStateBase):
       ("CRUISE_LAMP_M", "EMS16", 0),
       ("CF_Lvr_CruiseSet", "LVR12", 0),
       # ("Vision_ObjDist_Low","V_OptData_739", 0),
-    ]
-
-    signals += [
-    ("MainMode_ACC", "SCC11", 0),
-    ("VSetDis", "SCC11", 0),
-    ("SCCInfoDisplay", "SCC11", 0),
-    ("ACC_ObjDist", "SCC11", 0),
-    ("ACCMode", "SCC12", 1),
     ]
 
     if CP.carFingerprint in FEATURES["use_cluster_gears"]:
