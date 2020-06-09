@@ -119,17 +119,17 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     //   cruise_engaged_prev = cruise_engaged;
     // }
 
-    if (addr == 608) {
-      // bit 25
-      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
-      if (cruise_engaged && !cruise_engaged_prev) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 0;
-      }
-      cruise_engaged_prev = cruise_engaged;
-    }
+    // if (addr == 608) {
+    //   // bit 25
+    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
+    //   if (cruise_engaged && !cruise_engaged_prev) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_engaged;
+    // }
 
     // exit controls on rising edge of gas press
     // if (addr == 608) {
@@ -141,12 +141,12 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     // }
 
     // sample subaru wheel speed, averaging opposite corners
-    if (addr == 902) {
-      int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
-      hyundai_speed += (GET_BYTES_48(to_push) >> 16) & 0x3FFF;  // RL
-      hyundai_speed /= 2;
-      vehicle_moving = hyundai_speed > HYUNDAI_STANDSTILL_THRSLD;
-    }
+    // if (addr == 902) {
+    //   int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
+    //   hyundai_speed += (GET_BYTES_48(to_push) >> 16) & 0x3FFF;  // RL
+    //   hyundai_speed /= 2;
+    //   vehicle_moving = hyundai_speed > HYUNDAI_STANDSTILL_THRSLD;
+    // }
 
     // exit controls on rising edge of brake press
     // I'm not advertising this repository anywhere, and this vehicle does NOT have long control working,
