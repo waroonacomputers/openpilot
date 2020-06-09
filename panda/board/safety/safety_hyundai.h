@@ -14,7 +14,6 @@ const CanMsg HYUNDAI_TX_MSGS[] = {
   {1057, 0, 8}, //   SCC12,  Bus 0
   {1290, 0, 8}, //   SCC13,  Bus 0
   {905, 0, 8},  //   SCC14,  Bus 0
-  {1186, 0, 2}  //   4a2SCC, Bus 0
  };
 
 // TODO: missing checksum for wheel speeds message,worst failure case is
@@ -113,17 +112,17 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     //   cruise_engaged_prev = cruise_engaged;
     // }
 
-    // if (addr == 608) {
-    //   // bit 25
-    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
-    //   if (cruise_engaged && !cruise_engaged_prev) {
-    //     controls_allowed = 1;
-    //   }
-    //   if (!cruise_engaged) {
-    //     controls_allowed = 0;
-    //   }
-    //   cruise_engaged_prev = cruise_engaged;
-    // }
+    if (addr == 608) {
+      // bit 25
+      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
+      if (cruise_engaged && !cruise_engaged_prev) {
+        controls_allowed = 1;
+      }
+      if (!cruise_engaged) {
+        controls_allowed = 0;
+      }
+      cruise_engaged_prev = cruise_engaged;
+    }
 
     // exit controls on rising edge of gas press
     // if (addr == 608) {
@@ -205,9 +204,9 @@ static int hyundai_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
     }
 
     // no torque if controls is not allowed
-    if (!controls_allowed && (desired_torque != 0)) {
-      violation = 1;
-    }
+    // if (!controls_allowed && (desired_torque != 0)) {
+    //   violation = 1;
+    // }
 
     // reset to 0 if either controls is not allowed or there's a violation
     if (violation || !controls_allowed) {
