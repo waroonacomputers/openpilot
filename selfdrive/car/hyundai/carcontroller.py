@@ -135,6 +135,7 @@ class CarController():
       
     if frame % 20 == 0:
       can_sends.append(create_scc13(self.packer))
+      cloudlog.info("create_scc13(self.packer)")
     # if frame % 50 == 0:
     #   can_sends.append(create_4a2SCC(self.packer))
     #20 Hz LFA MFA message
