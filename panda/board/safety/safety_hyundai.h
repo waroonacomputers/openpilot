@@ -250,5 +250,5 @@ const safety_hooks hyundai_hooks = {
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = hyundai_fwd_hook,
   .addr_check = hyundai_rx_checks,
-  .addr_check_len = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]),
+  .addr_check_len = 1,
 };
