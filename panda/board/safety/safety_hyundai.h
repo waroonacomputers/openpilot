@@ -27,54 +27,54 @@ AddrCheckStruct hyundai_rx_checks[] = {
 };
 const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
 
-static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
-  int addr = GET_ADDR(to_push);
+// static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
+//   int addr = GET_ADDR(to_push);
 
-  uint8_t cnt;
-  if (addr == 608) {
-    cnt = (GET_BYTE(to_push, 7) >> 4) & 0x3;
-  } else if (addr == 902) {
-    cnt = ((GET_BYTE(to_push, 3) >> 6) << 2) | (GET_BYTE(to_push, 1) >> 6);
-  } else if (addr == 916) {
-    cnt = (GET_BYTE(to_push, 1) >> 5) & 0x7;
-  } else {
-    cnt = 0;
-  }
-  return cnt;
-}
+//   uint8_t cnt;
+//   if (addr == 608) {
+//     cnt = (GET_BYTE(to_push, 7) >> 4) & 0x3;
+//   } else if (addr == 902) {
+//     cnt = ((GET_BYTE(to_push, 3) >> 6) << 2) | (GET_BYTE(to_push, 1) >> 6);
+//   } else if (addr == 916) {
+//     cnt = (GET_BYTE(to_push, 1) >> 5) & 0x7;
+//   } else {
+//     cnt = 0;
+//   }
+//   return cnt;
+// }
 
-static uint8_t hyundai_get_checksum(CAN_FIFOMailBox_TypeDef *to_push) {
-  int addr = GET_ADDR(to_push);
+// static uint8_t hyundai_get_checksum(CAN_FIFOMailBox_TypeDef *to_push) {
+//   int addr = GET_ADDR(to_push);
 
-  uint8_t chksum;
-  if (addr == 608) {
-    chksum = GET_BYTE(to_push, 7) & 0xF;
-  } else if (addr == 916) {
-    chksum = GET_BYTE(to_push, 6) & 0xF;
-  } else {
-    chksum = 0;
-  }
-  return chksum;
-}
+//   uint8_t chksum;
+//   if (addr == 608) {
+//     chksum = GET_BYTE(to_push, 7) & 0xF;
+//   } else if (addr == 916) {
+//     chksum = GET_BYTE(to_push, 6) & 0xF;
+//   } else {
+//     chksum = 0;
+//   }
+//   return chksum;
+// }
 
-static uint8_t hyundai_compute_checksum(CAN_FIFOMailBox_TypeDef *to_push) {
-  int addr = GET_ADDR(to_push);
+// static uint8_t hyundai_compute_checksum(CAN_FIFOMailBox_TypeDef *to_push) {
+//   int addr = GET_ADDR(to_push);
 
-  uint8_t chksum = 0;
-  // same algorithm, but checksum is in a different place
-  for (int i = 0; i < 8; i++) {
-    uint8_t b = GET_BYTE(to_push, i);
-    if (((addr == 608) && (i == 7)) || ((addr == 916) && (i == 6)) || ((addr == 1057) && (i == 7))) {
-      b &= (addr == 1057) ? 0x0FU : 0xF0U; // remove checksum
-    }
-    chksum += (b % 16U) + (b / 16U);
-  }
-  return (16U - (chksum %  16U)) % 16U;
-}
+//   uint8_t chksum = 0;
+//   // same algorithm, but checksum is in a different place
+//   for (int i = 0; i < 8; i++) {
+//     uint8_t b = GET_BYTE(to_push, i);
+//     if (((addr == 608) && (i == 7)) || ((addr == 916) && (i == 6)) || ((addr == 1057) && (i == 7))) {
+//       b &= (addr == 1057) ? 0x0FU : 0xF0U; // remove checksum
+//     }
+//     chksum += (b % 16U) + (b / 16U);
+//   }
+//   return (16U - (chksum %  16U)) % 16U;
+// }
 
 static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
-  bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN, NULL, NULL, NULL);
+  bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN,NULL, NULL, NULL);
 
   // bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
 
@@ -101,29 +101,29 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     //   cruise_engaged_prev = cruise_engaged;
     // }
 
-    if (addr == 871 ) {
-      // first byte
-      int cruise_engaged = (GET_BYTES_04(to_push) & 0xFF);
-      if (cruise_engaged && !cruise_engaged_prev) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 0;
-      }
-      cruise_engaged_prev = cruise_engaged;
-    }
+    // if (addr == 871 ) {
+    //   // first byte
+    //   int cruise_engaged = (GET_BYTES_04(to_push) & 0xFF);
+    //   if (cruise_engaged && !cruise_engaged_prev) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_engaged;
+    // }
 
-    if (addr == 608) {
-      // bit 25
-      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
-      if (cruise_engaged && !cruise_engaged_prev) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 0;
-      }
-      cruise_engaged_prev = cruise_engaged;
-    }
+    // if (addr == 608) {
+    //   // bit 25
+    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
+    //   if (cruise_engaged && !cruise_engaged_prev) {
+    //     controls_allowed = 1;
+    //   }
+    //   if (!cruise_engaged) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_engaged;
+    // }
 
     // exit controls on rising edge of gas press
     // if (addr == 608) {
