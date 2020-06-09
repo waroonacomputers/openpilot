@@ -16,13 +16,16 @@ const CanMsg HYUNDAI_TX_MSGS[] = {
   {905, 0, 8},  //   SCC14,  Bus 0
   {1186, 0, 2}  //   4a2SCC, Bus 0
  };
-AddrCheckStruct hyundai_rx_checks[] = {
-  {.addr = {593}, .bus = 0, .expected_timestep = 20000U},
-  {.addr = {1057}, .bus = 0, .expected_timestep = 20000U},
-};
-const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
+
 // TODO: missing checksum for wheel speeds message,worst failure case is
 //       wheel speeds stuck at 0 and we don't disengage on brake press
+AddrCheckStruct hyundai_rx_checks[] = {
+   {.msg = {{608, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}}},
+  // {.msg = {{902, 0, 8, .max_counter = 15U,  .expected_timestep = 10000U}}},
+   {.msg = {{916, 0, 8, .check_checksum = true, .max_counter = 7U, .expected_timestep = 10000U}}},
+  //{.msg = {{1057, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 20000U}}},
+};
+const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
 
 // static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
 //   int addr = GET_ADDR(to_push);
@@ -71,7 +74,7 @@ const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_c
 
 static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
-  bool valid = true
+  bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN,NULL, NULL, NULL);
 
   // bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
 
