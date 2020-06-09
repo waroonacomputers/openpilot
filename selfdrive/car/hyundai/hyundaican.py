@@ -24,9 +24,9 @@ def create_scc11(packer, enabled, count):
     "Navi_SCC_Camera_Act": 0,
     "Navi_SCC_Camera_Status": 0,
     "ACC_ObjStatus": objStatus,
-    "ACC_ObjDist": objDist,
     "ACC_ObjLatPos":0,
     "ACC_ObjRelSpd":0,
+    "ACC_ObjDist": objDist,
   }
   return packer.make_can_msg("SCC11", 0, values)
 
@@ -86,11 +86,11 @@ def create_scc14(packer, enabled):
     }
   return packer.make_can_msg("SCC14", 0, values)
 
-def create_4a2SCC(packer):
-  values = {
-    "Paint_1": 1
-  }
-  return packer.make_can_msg("4a2SCC", 0, values)
+# def create_4a2SCC(packer):
+#   values = {
+#     "Paint_1": 1
+#   }
+#   return packer.make_can_msg("4a2SCC", 0, values)
 
 def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
                   lkas11, sys_warning, sys_state, enabled,

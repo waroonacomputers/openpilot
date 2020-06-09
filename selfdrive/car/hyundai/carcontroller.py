@@ -1,7 +1,7 @@
 from cereal import car
 from common.numpy_fast import clip
 from selfdrive.car import apply_std_steer_torque_limits
-from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_scc11, create_scc12, create_scc13, create_scc14, create_4a2SCC
+from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_scc11, create_scc12, create_scc13, create_scc14
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 
@@ -127,8 +127,8 @@ class CarController():
       can_sends.append(create_scc14(self.packer, enabled))
     if frame % 20 == 0:
       can_sends.append(create_scc13(self.packer))
-    if frame % 50 == 0:
-      can_sends.append(create_4a2SCC(self.packer))
+    # if frame % 50 == 0:
+    #   can_sends.append(create_4a2SCC(self.packer))
     # 20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in [CAR.SONATA, CAR.PALISADE]:
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))
