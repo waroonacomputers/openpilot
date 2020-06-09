@@ -101,29 +101,29 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     //   cruise_engaged_prev = cruise_engaged;
     // }
 
-    // if (addr == 871 ) {
-    //   // first byte
-    //   int cruise_engaged = (GET_BYTES_04(to_push) & 0xFF);
-    //   if (cruise_engaged && !cruise_engaged_prev) {
-    //     controls_allowed = 1;
-    //   }
-    //   if (!cruise_engaged) {
-    //     controls_allowed = 0;
-    //   }
-    //   cruise_engaged_prev = cruise_engaged;
-    // }
+    if (addr == 871 ) {
+      // first byte
+      int cruise_engaged = (GET_BYTES_04(to_push) & 0xFF);
+      if (cruise_engaged && !cruise_engaged_prev) {
+        controls_allowed = 1;
+      }
+      if (!cruise_engaged) {
+        controls_allowed = 0;
+      }
+      cruise_engaged_prev = cruise_engaged;
+    }
 
-    // if (addr == 608) {
-    //   // bit 25
-    //   int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
-    //   if (cruise_engaged && !cruise_engaged_prev) {
-    //     controls_allowed = 1;
-    //   }
-    //   if (!cruise_engaged) {
-    //     controls_allowed = 0;
-    //   }
-    //   cruise_engaged_prev = cruise_engaged;
-    // }
+    if (addr == 608) {
+      // bit 25
+      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
+      if (cruise_engaged && !cruise_engaged_prev) {
+        controls_allowed = 1;
+      }
+      if (!cruise_engaged) {
+        controls_allowed = 0;
+      }
+      cruise_engaged_prev = cruise_engaged;
+    }
 
     // exit controls on rising edge of gas press
     // if (addr == 608) {
