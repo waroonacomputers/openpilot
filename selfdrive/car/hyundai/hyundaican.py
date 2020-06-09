@@ -51,8 +51,8 @@ def create_scc12(packer, apply_accel, enabled, cnt):
     "AEB_StopReq": 0,
     "CR_VSM_Alive": cnt,
     "CR_VSM_ChkSum": 0,
-    "aReqValue": apply_accel+3.0 if enabled else 0,
-    "aReqRaw": apply_accel+3.0 if enabled else -10.23,
+    "aReqValue": 4.0 if enabled else 0,
+    "aReqRaw": 4.0 if enabled else -10.23,
   }
   dat = packer.make_can_msg("SCC12", 0, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
