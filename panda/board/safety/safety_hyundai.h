@@ -243,7 +243,7 @@ static int hyundai_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
     if (bus_num == 0) {
       bus_fwd = 2;
     }
-    if ((bus_num == 2) && (addr != 832) && (addr != 1157)) {
+    if ((bus_num == 2) && (addr != 832) && (addr != 1057) && (addr != 1290) && (addr = 905) && (addr != 1157)) {
       bus_fwd = 0;
     }
   }
