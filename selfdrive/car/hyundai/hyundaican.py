@@ -51,8 +51,8 @@ def create_scc12(packer, apply_accel, enabled, cnt):
     "AEB_StopReq": 0,
     "CR_VSM_Alive": cnt,
     "CR_VSM_ChkSum": 0,
-    "aReqValue": 4.0 if enabled else 0,
-    "aReqRaw": 4.0 if enabled else -10.23,
+    "aReqMax": 4.0 if enabled else 0,
+    "aReqMin": 4.0 if enabled else -10.23,
   }
   dat = packer.make_can_msg("SCC12", 0, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
@@ -74,8 +74,7 @@ def create_scc14(packer, enabled):
       "JerkLowerLimit" : 0.1,
       "ComfortBandUpper" : 0.24,
       "ComfortBandLower" : 0.24,
-      "ACCMode" : 1,
-      "ObjGap" : 5,
+      "SCCMode" : 1,
     }
   else:
     values = {
@@ -83,8 +82,7 @@ def create_scc14(packer, enabled):
       "JerkLowerLimit" : 0,
       "ComfortBandUpper" : 0,
       "ComfortBandLower" : 0,
-      "ACCMode" : 0,
-      "ObjGap" : 2,
+      "SCCMode" : 0,
     }
   return packer.make_can_msg("SCC14", 0, values)
 
