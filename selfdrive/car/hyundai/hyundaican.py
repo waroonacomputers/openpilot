@@ -3,20 +3,20 @@ from selfdrive.car.hyundai.values import CAR, CHECKSUM
 
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 
-def create_scc11(packer, enabled, count):
+def create_scc11(packer, enabled, count, set_speed, lead_visible):
   objValid = 0
   objStatus = 0
   objDist = 150
   if enabled:
     objValid = 1
     objStatus = 1
-    objDist = 3
+    objDist = 20
   values = {
     "MainMode_ACC": enabled,
     "SCCInfoDisplay": 0,
     "AliveCounterACC": count,
-    "VSetDis": 0,  # km/h velosity
-    "ObjValid": objValid,
+    "VSetDis": set_speed if enabled else 0,  # km/h velosity
+    "ObjValid": lead_visible,
     "DriverAlertDisplay": 0,
     "TauGapSet": 1,
     "Navi_SCC_Curve_Status": 0,
@@ -51,8 +51,8 @@ def create_scc12(packer, apply_accel, enabled, cnt):
     "AEB_StopReq": 0,
     "CR_VSM_Alive": cnt,
     "CR_VSM_ChkSum": 0,
-    "aReqValue": 4.0 if enabled else 0,
-    "aReqRaw": 4.0 if enabled else -10.23,
+    "aReqValue": apply_accel else 0,
+    "aReqRaw": apply_accel else -10.23,
   }
   dat = packer.make_can_msg("SCC12", 0, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16

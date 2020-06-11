@@ -69,7 +69,7 @@ class CarController():
     self.scc12_cnt = 0
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
-             left_lane, right_lane, left_lane_depart, right_lane_depart):
+             left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible):
     # Steering Torque
     self.scc11_cnt %= 16
     self.scc12_cnt %= 0xF
@@ -125,7 +125,7 @@ class CarController():
 
     if frame % 2 == 0:
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
-      can_sends.append(create_scc11(self.packer, frame, self.scc11_cnt))
+      can_sends.append(create_scc11(self.packer, frame, self.scc11_cnt, set_speed, lead_visible))
       self.scc11_cnt += 1
       self.scc12_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))

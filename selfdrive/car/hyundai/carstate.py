@@ -40,16 +40,17 @@ class CarState(CarStateBase):
     #                                    cp.vl['EMS16']['CRUISE_LAMP_M']
     #self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
     #                                  (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
+    ret.cruiseState.enabled = cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0
     ret.cruiseState.available = True
-    ret.cruiseState.enabled = cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
-    ret.cruiseState.standstill = (not ret.vEgoRaw > 0.1)
-
+    ret.cruiseState.standstill = False
+    self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     if ret.cruiseState.enabled:
-      is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
-      speed_conv = CV.MPH_TO_MS if is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed =  (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+      speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
+      ret.cruiseState.speed = cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
     else:
       ret.cruiseState.speed = 0
+    self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
+    self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]
 
     # TODO: Find brake pressure
     ret.brake = 0
