@@ -171,7 +171,7 @@ class CarInterface(CarInterfaceBase):
     if self.low_speed_alert:
       events.add(car.CarEvent.EventName.belowSteerSpeed)
 
- buttonEvents = []
+    buttonEvents = []
     if self.CS.cruise_buttons != self.CS.prev_cruise_buttons:
       be = car.CarState.ButtonEvent.new_message()
       be.pressed = self.CS.cruise_buttons != 0 
@@ -195,6 +195,18 @@ class CarInterface(CarInterfaceBase):
     ret.buttonEvents = buttonEvents
 
     events = self.create_common_events(ret)
+
+    for b in ret.buttonEvents:
+      # do enable on both accel and decel buttons
+      if b.type in [ButtonType.accelCruise, ButtonType.decelCruise] and not b.pressed:
+        events.add(EventName.buttonEnable)
+      # do disable on button down
+      if b.type == ButtonType.cancel and b.pressed:
+        events.add(EventName.buttonCancel)
+    if EventName.wrongCarMode in events.events:
+      events.events.remove(EventName.wrongCarMode)
+    if EventName.pcmDisable in events.events:
+      events.events.remove(EventName.pcmDisable)
 
     ret.events = events.to_msg()
 
