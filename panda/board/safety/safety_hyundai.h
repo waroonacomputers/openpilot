@@ -132,26 +132,9 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // enter controls on rising edge of ACC, exit controls on ACC off
-    if (addr == 1057 && (bus != 1 || !hyundai_LCAN_on_bus1)) {
-      hyundai_has_scc = true;
-      car_SCC_live = 50;
-      int cruise_engaged;
-      if (OP_SCC_live) { // for cars with long control
-        cruise_engaged = (GET_BYTES_04(to_push) >> 13) & 0x3; // 2 bits: 13-14
-      } else if (!OP_SCC_live) { // for cars without long control
-        cruise_engaged = GET_BYTES_04(to_push) & 0x1; // ACC main_on signal
-      }
-      if (cruise_engaged && !cruise_engaged_prev) {
-        controls_allowed = 1;
-      }
-      if (!cruise_engaged) {
-        controls_allowed = 0;
-      }
-      cruise_engaged_prev = cruise_engaged;
-    }
 
     // cruise control for car without SCC
-    if (addr == 608 && bus == 0 && !hyundai_has_scc && !OP_SCC_live) {
+    if (addr == 608) {
       // bit 25
       int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
       if (cruise_engaged && !cruise_engaged_prev) {
@@ -162,29 +145,21 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       }
       cruise_engaged_prev = cruise_engaged;
     }
-    // engage for Cruise control disabled car
-    if (addr == 1265 && bus == 0 && OP_SCC_live && !car_SCC_live) {
-      // first byte
-      int cruise_button = (GET_BYTES_04(to_push) & 0x7);
-      // enable on both accel and decel buttons falling edge
-      if (!cruise_button && (cruise_engaged_prev == 1 || cruise_engaged_prev == 2)) {
-        controls_allowed = 1;
-      }
-      // disable on cancel rising edge
-      if (cruise_button == 4) {
-        controls_allowed = 0;
-      }
-      cruise_engaged_prev = cruise_button;
-    }
+    // // engage for Cruise control disabled car
+    // if (addr == 1265) {
+    //   // first byte
+    //   int cruise_button = (GET_BYTES_04(to_push) & 0x7);
+    //   // enable on both accel and decel buttons falling edge
+    //   if (!cruise_button && (cruise_engaged_prev == 1 || cruise_engaged_prev == 2)) {
+    //     controls_allowed = 1;
+    //   }
+    //   // disable on cancel rising edge
+    //   if (cruise_button == 4) {
+    //     controls_allowed = 0;
+    //   }
+    //   cruise_engaged_prev = cruise_button;
+    // }
     // exit controls on rising edge of gas press for cars with long control
-    if (addr == 608 && OP_SCC_live && bus == 0) {
-      bool gas_pressed = (GET_BYTE(to_push, 7) >> 6) != 0;
-      if (!unsafe_allow_gas && gas_pressed && !gas_pressed_prev) {
-        controls_allowed = 0;
-      }
-      gas_pressed_prev = gas_pressed;
-    }
-
     // sample subaru wheel speed, averaging opposite corners
     if (addr == 902 && bus == 0) {
       int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
