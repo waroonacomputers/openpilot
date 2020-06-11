@@ -70,9 +70,9 @@ def create_scc13(packer):
 def create_scc14(packer, enabled):
   if enabled:
     values = {
-      "JerkUpperLimit" : 3.2,
+      "JerkUpperLimit" : 7,
       "JerkLowerLimit" : 0.1,
-      "ComfortBandUpper" : 0.24,
+      "ComfortBandUpper" : 7,
       "ComfortBandLower" : 0.24,
       "ACCMode" : 1,
       "ObjGap" : 5,
