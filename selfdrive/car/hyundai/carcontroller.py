@@ -129,7 +129,7 @@ class CarController():
       self.scc_update_frame = frame
 
     # check if SCC on bus 0 is live
-    if frame % 7 == 0 and not CS.no_radar:
+    if frame % 7 == 0:
       if CS.scc11["AliveCounterACC"] == self.prev_scc_cnt:
         if frame - self.scc_update_frame > 20 and self.scc_live:
           self.scc_live = False
@@ -161,7 +161,7 @@ class CarController():
       can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
     # send scc to car if longcontrol enabled and SCC not on bus 0 or ont live
-    if self.longcontrol and (CS.scc_bus or not self.scc_live) and frame % 2 == 0: 
+    if frame % 2 == 0: 
       can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, CS.scc12))
       can_sends.append(create_scc11(self.packer, frame, enabled, set_speed, lead_visible, CS.scc11))
       if CS.has_scc13 and frame % 20 == 0:
