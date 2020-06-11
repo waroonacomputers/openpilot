@@ -203,10 +203,6 @@ class CarInterface(CarInterfaceBase):
       # do disable on button down
       if b.type == ButtonType.cancel and b.pressed:
         events.add(EventName.buttonCancel)
-    if EventName.wrongCarMode in events.events:
-      events.events.remove(EventName.wrongCarMode)
-    if EventName.pcmDisable in events.events:
-      events.events.remove(EventName.pcmDisable)
 
     ret.events = events.to_msg()
 
