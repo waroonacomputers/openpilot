@@ -45,7 +45,7 @@ class CarState(CarStateBase):
     #                                    cp.vl['EMS16']['CRUISE_LAMP_M']
     #self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
     #                                  (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
-    ret.cruiseState.enabled = cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0
+    ret.cruiseState.enabled = cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
     ret.cruiseState.available = True
     ret.cruiseState.standstill = False
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
