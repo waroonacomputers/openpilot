@@ -68,24 +68,14 @@ def create_scc13(packer):
   return packer.make_can_msg("SCC13", 0, values)
 
 def create_scc14(packer, enabled):
-  if enabled:
-    values = {
-      "JerkUpperLimit" : 7,
-      "JerkLowerLimit" : 0.1,
-      "ComfortBandUpper" : 7,
-      "ComfortBandLower" : 0.24,
-      "ACCMode" : 1,
-      "ObjGap" : 5,
-    }
-  else:
-    values = {
-      "JerkUpperLimit" : 0,
-      "JerkLowerLimit" : 0,
-      "ComfortBandUpper" : 0,
-      "ComfortBandLower" : 0,
-      "ACCMode" : 0,
-      "ObjGap" : 2,
-    }
+  values = {
+    "JerkUpperLimit" : 7 if enabled else 0,
+    "JerkLowerLimit" : 0.1 if enabled else 0,
+    "ComfortBandUpper" : 1.26 if enabled else 0,
+    "ComfortBandLower" : 0.24 if enabled else 0,
+    "ACCMode" : 1 if enabled else 0,
+    "ObjGap" : 5 if enabled else 2,
+  }
   return packer.make_can_msg("SCC14", 0, values)
 
 # def create_4a2SCC(packer):
