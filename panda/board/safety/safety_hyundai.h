@@ -75,7 +75,7 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
   bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN,NULL, NULL, NULL);
 
-  // bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
+  bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;
 
   int addr = GET_ADDR(to_push);
   int bus = GET_BUS(to_push);
@@ -124,14 +124,14 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       cruise_engaged_prev = cruise_engaged;
     }
 
-    // exit controls on rising edge of gas press
-    // if (addr == 608) {
-    //   bool gas_pressed = (GET_BYTE(to_push, 7) >> 6) != 0;
-    //   if (!unsafe_allow_gas && gas_pressed && !gas_pressed_prev) {
-    //     controls_allowed = 0;
-    //   }
-    //   gas_pressed_prev = gas_pressed;
-    // }
+    exit controls on rising edge of gas press
+    if (addr == 608) {
+      bool gas_pressed = (GET_BYTE(to_push, 7) >> 6) != 0;
+      if (!unsafe_allow_gas && gas_pressed && !gas_pressed_prev) {
+        controls_allowed = 0;
+      }
+      gas_pressed_prev = gas_pressed;
+    }
 
     // sample subaru wheel speed, averaging opposite corners
     // if (addr == 902) {
@@ -141,16 +141,16 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     //   vehicle_moving = hyundai_speed > HYUNDAI_STANDSTILL_THRSLD;
     // }
 
-    // exit controls on rising edge of brake press
-    // I'm not advertising this repository anywhere, and this vehicle does NOT have long control working,
-    // and considering comma said that they only enforce this on honda and toyota at the moment, I feel nothing wrong with doing something similar to xx979xx
-    // if (addr == 916) {
-    //   bool brake_pressed = (GET_BYTE(to_push, 6) >> 7) != 0;
-    //   if (brake_pressed && (!brake_pressed_prev || vehicle_moving)) {
-    //     controls_allowed = 0;
-    //   }
-    //   brake_pressed_prev = brake_pressed;
-    // }
+    exit controls on rising edge of brake press
+    I'm not advertising this repository anywhere, and this vehicle does NOT have long control working,
+    and considering comma said that they only enforce this on honda and toyota at the moment, I feel nothing wrong with doing something similar to xx979xx
+    if (addr == 916) {
+      bool brake_pressed = (GET_BYTE(to_push, 6) >> 7) != 0;
+      if (brake_pressed && (!brake_pressed_prev || vehicle_moving)) {
+        controls_allowed = 0;
+      }
+      brake_pressed_prev = brake_pressed;
+    }
 
     // check if stock camera ECU is on bus 0
     if ((safety_mode_cnt > RELAY_TRNS_TIMEOUT) && (addr == 832)) {
