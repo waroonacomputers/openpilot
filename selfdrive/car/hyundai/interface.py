@@ -21,7 +21,7 @@ class CarInterface(CarInterfaceBase):
 
     # Hyundai port is a community feature for now
     ret.communityFeature = True
-    #ret.openpilotLongitudinalControl = any([1056 in fingerprint[0], 1056 in fingerprint[1], 1056 in fingerprint[2]])
+    ret.openpilotLongitudinalControl = True
 
     ret.steerActuatorDelay = 0.1  # Default delay
     ret.steerRateCost = 0.5
@@ -170,6 +170,31 @@ class CarInterface(CarInterfaceBase):
       self.low_speed_alert = False
     if self.low_speed_alert:
       events.add(car.CarEvent.EventName.belowSteerSpeed)
+
+ buttonEvents = []
+    if self.CS.cruise_buttons != self.CS.prev_cruise_buttons:
+      be = car.CarState.ButtonEvent.new_message()
+      be.pressed = self.CS.cruise_buttons != 0 
+      but = self.CS.cruise_buttons if be.pressed else self.CS.prev_cruise_buttons
+      if but == Buttons.RES_ACCEL:
+        be.type = ButtonType.accelCruise
+      elif but == Buttons.SET_DECEL:
+        be.type = ButtonType.decelCruise
+      elif but == Buttons.GAP_DIST:
+        be.type = ButtonType.gapAdjustCruise
+      elif but == Buttons.CANCEL:
+        be.type = ButtonType.cancel
+      else:
+        be.type = ButtonType.unknown
+      buttonEvents.append(be)
+    if self.CS.cruise_main_button != self.CS.prev_cruise_main_button:
+      be = car.CarState.ButtonEvent.new_message()
+      be.type = ButtonType.altButton3
+      be.pressed = bool(self.CS.cruise_main_button)
+      buttonEvents.append(be)
+    ret.buttonEvents = buttonEvents
+
+    events = self.create_common_events(ret)
 
     ret.events = events.to_msg()
 

@@ -24,7 +24,8 @@ class CarState(CarStateBase):
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
     ret.standstill = ret.vEgoRaw < 0.1
-
+    self.prev_cruise_buttons = self.cruise_buttons
+    self.prev_cruise_main_button = self.cruise_main_button
     ret.steeringAngle = cp.vl["SAS11"]['SAS_Angle']
     ret.steeringRate = cp.vl["SAS11"]['SAS_Speed']
     ret.yawRate = cp.vl["ESP12"]['YAW_RATE']
