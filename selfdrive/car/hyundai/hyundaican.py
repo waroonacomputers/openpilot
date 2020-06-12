@@ -3,6 +3,86 @@ from selfdrive.car.hyundai.values import CAR, CHECKSUM
 
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 
+def create_scc11(packer, bus, enabled, count, set_speed, lead_visible):
+  objValid = 0
+  objStatus = 0
+  objDist = 150
+  if enabled:
+    objValid = 1
+    objStatus = 1
+    objDist = 20
+  values = {
+    "MainMode_ACC": enabled,
+    "SCCInfoDisplay": 0,
+    "AliveCounterACC": count,
+    "VSetDis": set_speed if enabled else 0,  # km/h velosity
+    "ObjValid": lead_visible,
+    "DriverAlertDisplay": 0,
+    "TauGapSet": 1,
+    "Navi_SCC_Curve_Status": 0,
+    "Navi_SCC_Curve_Act": 0,
+    "Navi_SCC_Camera_Act": 0,
+    "Navi_SCC_Camera_Status": 0,
+    "ACC_ObjStatus": objStatus,
+    "ACC_ObjLatPos":0,
+    "ACC_ObjRelSpd":0,
+    "ACC_ObjDist": objDist,
+  }
+  return packer.make_can_msg("SCC11", bus, values)
+
+def create_scc12(packer, bus, apply_accel, enabled, cnt):
+  values = {
+    "CF_VSM_Prefill": 0,
+    "CF_VSM_DecCmdAct": 0,
+    "CF_VSM_HBACmd": 0,
+    "CF_VSM_Warn": 0,
+    "CF_VSM_Stat": 0,
+    "CF_VSM_BeltCmd": 0,
+    "ACCFailInfo": 0,
+    "ACCMode": enabled,
+    "StopReq": 0,
+    "CR_VSM_DecCmd": 0,
+    "TakeOverReq": 0,
+    "PreFill": 0,
+    "CF_VSM_ConfMode": 0,
+    "AEB_Failinfo": 0,
+    "AEB_Status": 0,
+    "AEB_CmdAct": 0,
+    "AEB_StopReq": 0,
+    "CR_VSM_Alive": cnt,
+    "CR_VSM_ChkSum": 0,
+    "aReqValue": apply_accel if enabled else 0,
+    "aReqRaw": apply_accel if enabled else 0,
+  }
+  dat = packer.make_can_msg("SCC12", bus, values)[2]
+  values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
+
+  return packer.make_can_msg("SCC12", bus, values)
+
+def create_scc13(packer, bus):
+  values = {
+    "SCCDrvModeRValue" : 2,
+    "SCC_Equip" : 1,
+    "AebDrvSetStatus" : 0,
+  }
+  return packer.make_can_msg("SCC13", bus, values)
+
+def create_scc14(packer, bus, enabled):
+  values = {
+    "JerkUpperLimit" : 7 if enabled else 0,
+    "JerkLowerLimit" : 0.1 if enabled else 0,
+    "ComfortBandUpper" : 1.26 if enabled else 0,
+    "ComfortBandLower" : 0.24 if enabled else 0,
+    "ACCMode" : 1 if enabled else 0,
+    "ObjGap" : 5 if enabled else 2,
+  }
+  return packer.make_can_msg("SCC14", bus, values)
+
+# def create_4a2SCC(packer):
+#   values = {
+#     "Paint_1": 1
+#   }
+#   return packer.make_can_msg("4a2SCC", 0, values)
 
 def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
                   lkas11, sys_warning, sys_state, enabled,
