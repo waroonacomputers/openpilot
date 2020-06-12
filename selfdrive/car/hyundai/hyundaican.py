@@ -28,7 +28,7 @@ def create_scc11(packer, enabled, count, set_speed, lead_visible):
     "ACC_ObjRelSpd":0,
     "ACC_ObjDist": objDist,
   }
-  return packer.make_can_msg("SCC11", 0, values)
+  return packer.make_can_msg("SCC11", 2, values)
 
 def create_scc12(packer, apply_accel, enabled, cnt):
   values = {
@@ -54,10 +54,10 @@ def create_scc12(packer, apply_accel, enabled, cnt):
     "aReqValue": apply_accel if enabled else 0,
     "aReqRaw": apply_accel if enabled else 0,
   }
-  dat = packer.make_can_msg("SCC12", 0, values)[2]
+  dat = packer.make_can_msg("SCC12", 2, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
 
-  return packer.make_can_msg("SCC12", 0, values)
+  return packer.make_can_msg("SCC12", 2, values)
 
 def create_scc13(packer):
   values = {
@@ -65,7 +65,7 @@ def create_scc13(packer):
     "SCC_Equip" : 1,
     "AebDrvSetStatus" : 0,
   }
-  return packer.make_can_msg("SCC13", 0, values)
+  return packer.make_can_msg("SCC13", 2, values)
 
 def create_scc14(packer, enabled):
   values = {
@@ -76,7 +76,7 @@ def create_scc14(packer, enabled):
     "ACCMode" : 1 if enabled else 0,
     "ObjGap" : 5 if enabled else 2,
   }
-  return packer.make_can_msg("SCC14", 0, values)
+  return packer.make_can_msg("SCC14", 2, values)
 
 # def create_4a2SCC(packer):
 #   values = {
