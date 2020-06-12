@@ -67,10 +67,20 @@ class CarController():
     self.last_lead_distance = 0
     self.scc11_cnt = 0
     self.scc12_cnt = 0
+    self.last_enabled = False
+    self.resuming = False
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
              left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible):
     # Steering Torque
+    if self.last_enabled and not enabled:
+      self.last_enabled = False
+    elif enabled and not self.last_enabled:
+      self.last_enabled = True
+      self.resuming = True
+    else:
+      self.resuming = False
+
     self.scc11_cnt %= 16
     self.scc12_cnt %= 0xF
     new_steer = actuators.steer * SteerLimitParams.STEER_MAX
@@ -129,13 +139,13 @@ class CarController():
       can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt, set_speed, lead_visible))
       self.scc11_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
-      can_sends.append(create_scc12(self.packer, 0, apply_accel, enabled, self.scc12_cnt))
-      can_sends.append(create_scc12(self.packer, 2, apply_accel, enabled, self.scc12_cnt))
+      can_sends.append(create_scc12(self.packer, 0, apply_accel, enabled, self.resuming, self.scc12_cnt))
+      can_sends.append(create_scc12(self.packer, 2, apply_accel, enabled, self.resuming, self.scc12_cnt))
       self.scc12_cnt += 1
       can_sends.append(create_scc14(self.packer, 0, enabled))
       can_sends.append(create_scc14(self.packer, 2, enabled))
       #cloudlog.info("create_scc14(self.packer, %d)" % (enabled))
-      
+
     if frame % 20 == 0:
       can_sends.append(create_scc13(self.packer, 0))
       can_sends.append(create_scc13(self.packer, 2))
