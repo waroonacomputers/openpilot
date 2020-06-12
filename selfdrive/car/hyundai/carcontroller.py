@@ -10,8 +10,8 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
-ACCEL_MAX = 1.5  # 1.5 m/s2
-ACCEL_MIN = -3.0  # 3   m/s2
+ACCEL_MAX = 2.0  # 1.5 m/s2 #TODO  change back to 1.5
+ACCEL_MIN = -3.5  # 3   m/s2 #TODO change back to -3.0
 ACCEL_SCALE = max(ACCEL_MAX, -ACCEL_MIN)
 
 def accel_hysteresis(accel, accel_steady, enabled):
@@ -127,9 +127,9 @@ class CarController():
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
       can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt, set_speed, lead_visible))
       self.scc11_cnt += 1
-      self.scc12_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
       can_sends.append(create_scc12(self.packer,apply_accel, enabled, self.scc12_cnt))
+      self.scc12_cnt += 1
       can_sends.append(create_scc14(self.packer, enabled))
       #cloudlog.info("create_scc14(self.packer, %d)" % (enabled))
       

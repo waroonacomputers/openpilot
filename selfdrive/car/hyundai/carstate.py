@@ -11,6 +11,7 @@ class CarState(CarStateBase):
   def __init__(self, CP):
     super().__init__(CP)
     self.cruise_main_button = 0
+    self.cruise_speed = 0
 
   def update(self, cp, cp_cam):
     ret = car.CarState.new_message()
@@ -48,10 +49,17 @@ class CarState(CarStateBase):
     ret.cruiseState.enabled = cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0
     ret.cruiseState.available = True
     ret.cruiseState.standstill = False
+
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
+    speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
+
+    if int(cp.vl["CLU11"]["CF_Clu_Vanz"]) > 20:
+      self.cruise_speed = cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
+    else:
+      self.cruise_speed = int(cp.vl["CLU11"]["CF_Clu_Vanz"]) * speed_conv
+
     if ret.cruiseState.enabled:
-      speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed = cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
+      ret.cruiseState.speed = self.cruise_speed
     else:
       ret.cruiseState.speed = 0
     self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
