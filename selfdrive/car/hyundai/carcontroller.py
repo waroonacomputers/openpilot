@@ -125,16 +125,20 @@ class CarController():
 
     if frame % 2 == 0:
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
-      can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt, set_speed, lead_visible))
+      can_sends.append(create_scc11(self.packer, 0, enabled, self.scc11_cnt, set_speed, lead_visible))
+      can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt, set_speed, lead_visible))
       self.scc11_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
-      can_sends.append(create_scc12(self.packer,apply_accel, enabled, self.scc12_cnt))
+      can_sends.append(create_scc12(self.packer, 0, apply_accel, enabled, self.scc12_cnt))
+      can_sends.append(create_scc12(self.packer, 2, apply_accel, enabled, self.scc12_cnt))
       self.scc12_cnt += 1
-      can_sends.append(create_scc14(self.packer, enabled))
+      can_sends.append(create_scc14(self.packer, 0, enabled))
+      can_sends.append(create_scc14(self.packer, 2, enabled))
       #cloudlog.info("create_scc14(self.packer, %d)" % (enabled))
       
     if frame % 20 == 0:
-      can_sends.append(create_scc13(self.packer))
+      can_sends.append(create_scc13(self.packer, 0))
+      can_sends.append(create_scc13(self.packer, 2))
       #cloudlog.info("create_scc13(self.packer)")
     # if frame % 50 == 0:
     #   can_sends.append(create_4a2SCC(self.packer))

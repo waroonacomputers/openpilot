@@ -3,7 +3,7 @@ from selfdrive.car.hyundai.values import CAR, CHECKSUM
 
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 
-def create_scc11(packer, enabled, count, set_speed, lead_visible):
+def create_scc11(packer, bus, enabled, count, set_speed, lead_visible):
   objValid = 0
   objStatus = 0
   objDist = 150
@@ -28,9 +28,9 @@ def create_scc11(packer, enabled, count, set_speed, lead_visible):
     "ACC_ObjRelSpd":0,
     "ACC_ObjDist": objDist,
   }
-  return packer.make_can_msg("SCC11", 2, values)
+  return packer.make_can_msg("SCC11", bus, values)
 
-def create_scc12(packer, apply_accel, enabled, cnt):
+def create_scc12(packer, bus, apply_accel, enabled, cnt):
   values = {
     "CF_VSM_Prefill": 0,
     "CF_VSM_DecCmdAct": 0,
@@ -54,20 +54,20 @@ def create_scc12(packer, apply_accel, enabled, cnt):
     "aReqValue": apply_accel if enabled else 0,
     "aReqRaw": apply_accel if enabled else 0,
   }
-  dat = packer.make_can_msg("SCC12", 2, values)[2]
+  dat = packer.make_can_msg("SCC12", bus, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
 
-  return packer.make_can_msg("SCC12", 2, values)
+  return packer.make_can_msg("SCC12", bus, values)
 
-def create_scc13(packer):
+def create_scc13(packer, bus):
   values = {
     "SCCDrvModeRValue" : 2,
     "SCC_Equip" : 1,
     "AebDrvSetStatus" : 0,
   }
-  return packer.make_can_msg("SCC13", 2, values)
+  return packer.make_can_msg("SCC13", bus, values)
 
-def create_scc14(packer, enabled):
+def create_scc14(packer, bus, enabled):
   values = {
     "JerkUpperLimit" : 7 if enabled else 0,
     "JerkLowerLimit" : 0.1 if enabled else 0,
@@ -76,7 +76,7 @@ def create_scc14(packer, enabled):
     "ACCMode" : 1 if enabled else 0,
     "ObjGap" : 5 if enabled else 2,
   }
-  return packer.make_can_msg("SCC14", 2, values)
+  return packer.make_can_msg("SCC14", bus, values)
 
 # def create_4a2SCC(packer):
 #   values = {
