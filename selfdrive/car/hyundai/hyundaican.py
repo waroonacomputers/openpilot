@@ -30,7 +30,7 @@ def create_scc11(packer, bus, enabled, count, set_speed, lead_visible):
   }
   return packer.make_can_msg("SCC11", bus, values)
 
-def create_scc12(packer, bus, apply_accel, enabled, cnt):
+def create_scc12(packer, bus, apply_accel, enabled, self.resuming, cnt):
   values = {
     "CF_VSM_Prefill": 0,
     "CF_VSM_DecCmdAct": 0,
@@ -39,7 +39,7 @@ def create_scc12(packer, bus, apply_accel, enabled, cnt):
     "CF_VSM_Stat": 0,
     "CF_VSM_BeltCmd": 0,
     "ACCFailInfo": 0,
-    "ACCMode": enabled,
+    "ACCMode": 2 if self.resuming else 1 if enabled else 0,
     "StopReq": 0,
     "CR_VSM_DecCmd": 0,
     "TakeOverReq": 0,
@@ -51,7 +51,7 @@ def create_scc12(packer, bus, apply_accel, enabled, cnt):
     "AEB_StopReq": 0,
     "CR_VSM_Alive": cnt,
     "CR_VSM_ChkSum": 0,
-    "aReqValue": apply_accel if enabled else 0,
+    "aReqValue": apply_accel - 1.0 if enabled else 0,
     "aReqRaw": apply_accel if enabled else 0,
   }
   dat = packer.make_can_msg("SCC12", bus, values)[2]
@@ -70,9 +70,9 @@ def create_scc13(packer, bus):
 def create_scc14(packer, bus, enabled):
   values = {
     "JerkUpperLimit" : 7 if enabled else 0,
-    "JerkLowerLimit" : 0.1 if enabled else 0,
+    "JerkLowerLimit" : 0.5 if enabled else 0,
     "ComfortBandUpper" : 1.26 if enabled else 0,
-    "ComfortBandLower" : 0.24 if enabled else 0,
+    "ComfortBandLower" : -4.14 if enabled else 0,
     "ACCMode" : 1 if enabled else 0,
     "ObjGap" : 5 if enabled else 2,
   }
