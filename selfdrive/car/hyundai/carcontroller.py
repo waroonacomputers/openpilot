@@ -1,7 +1,7 @@
 from cereal import car
 from common.numpy_fast import clip
 from selfdrive.car import apply_std_steer_torque_limits
-from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_scc11, create_scc12, create_scc13, create_scc14
+from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_scc11, create_scc12, create_scc13, create_scc14, create_FRT_RADAR11
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.swaglog import cloudlog
@@ -135,23 +135,24 @@ class CarController():
 
     if frame % 2 == 0:
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
-      can_sends.append(create_scc11(self.packer, 0, enabled, self.scc11_cnt, set_speed, lead_visible))
-      can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt, set_speed, lead_visible))
+      can_sends.append(create_scc11(self.packer, 0, enabled, self.scc11_cnt, set_speed, CC.lead_status, CC.vision_data, CC.lead_lat_pos))
+      can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt, set_speed, CC.lead_status, CC.vision_data, CC.lead_lat_pos))
       self.scc11_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
       can_sends.append(create_scc12(self.packer, 0, apply_accel, enabled, self.resuming, self.scc12_cnt))
       can_sends.append(create_scc12(self.packer, 2, apply_accel, enabled, self.resuming, self.scc12_cnt))
       self.scc12_cnt += 1
-      can_sends.append(create_scc14(self.packer, 0, enabled))
-      can_sends.append(create_scc14(self.packer, 2, enabled))
+      can_sends.append(create_scc14(self.packer, 0, enabled, self.resuming))
+      can_sends.append(create_scc14(self.packer, 2, enabled, self.resuming))
       #cloudlog.info("create_scc14(self.packer, %d)" % (enabled))
 
     if frame % 20 == 0:
       can_sends.append(create_scc13(self.packer, 0))
       can_sends.append(create_scc13(self.packer, 2))
       #cloudlog.info("create_scc13(self.packer)")
-    # if frame % 50 == 0:
-    #   can_sends.append(create_4a2SCC(self.packer))
+     if frame % 50 == 0:
+       can_sends.append(create_FRT_RADAR11(self.packer, 0))
+       can_sends.append(create_FRT_RADAR11(self.packer, 2))
     #20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in [CAR.SONATA, CAR.PALISADE]:
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))

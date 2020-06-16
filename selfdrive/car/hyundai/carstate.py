@@ -75,7 +75,11 @@ class CarState(CarStateBase):
     #TODO: find pedal signal for EV/HYBRID Cars
     ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
     ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
-
+    if (cp.vl["TCS13"]["DriverOverride"] == 0 and cp.vl["TCS13"]['ACC_REQ'] == 1):
+        ret.pedal_gas = 0
+      else:
+        ret.pedal_gas = cp.vl["EMS12"]['TPS']
+      ret.car_gas = cp.vl["EMS12"]['TPS']
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection,
     # as this seems to be standard over all cars, but is not the preferred method.
@@ -130,10 +134,13 @@ class CarState(CarStateBase):
 
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
+    self.vision_data = cp_cam.vl["V_OptData_739"]
+    self.lead_lat_pos = cp_cam.vl["V_OptData_73b"]["ObjLatPos"]
+    self.lead_status = cp_cam.vl["738LCAN"]["Target_Info"]
     self.clu11 = cp.vl["CLU11"]
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
     self.steer_state = cp.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
-    self.lead_distance = 20
+    self.lead_distance = cp_cam.vl["V_OptData_739"]['Vision_ObjDist_High']
 
     return ret
 
@@ -267,7 +274,17 @@ class CarState(CarStateBase):
       ("CF_Lkas_FcwCollisionWarning", "LKAS11", 0),
       ("CF_Lkas_FusionState", "LKAS11", 0),
       ("CF_Lkas_FcwOpt_USM", "LKAS11", 0),
-      ("CF_Lkas_LdwsOpt_USM", "LKAS11", 0)
+      ("CF_Lkas_LdwsOpt_USM", "LKAS11", 0),
+
+      ("Target_Info","738LCAN",0),
+
+      ("Vision_ObjLatPos","V_OptData_739",0),
+      ("Vision_ObjDist_2_High","V_OptData_739",0),
+      ("Vision_ObjDist_High","V_OptData_739",0),
+      ("Vision_ObjDist_Low","V_OptData_739",0),
+      ("Vision_ObjRelSpd","V_OptData_739",0),
+
+      ("Vision_ObjLatPos","V_OptData_73b",0),
     ]
 
     checks = []
