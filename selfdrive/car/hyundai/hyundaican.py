@@ -39,7 +39,7 @@ def create_scc12(packer, bus, apply_accel, enabled, self.resuming, cnt):
     "CF_VSM_Stat": 0,
     "CF_VSM_BeltCmd": 0,
     "ACCFailInfo": 0,
-    "ACCMode": 2 if self.resuming else 1 if enabled else 0,
+    "ACCMode": 1,
     "StopReq": 0,
     "CR_VSM_DecCmd": 0,
     "TakeOverReq": 0,
@@ -54,6 +54,12 @@ def create_scc12(packer, bus, apply_accel, enabled, self.resuming, cnt):
     "aReqValue": apply_accel - 1.0 if enabled else 0,
     "aReqRaw": apply_accel if enabled else 0,
   }
+  if enabled:
+    values["ACCMode"] = 1
+    if gas and (apply_accel >= 0):
+      values["ACCMode"] = 2
+  else:
+    values["ACCMode"] = 0
   dat = packer.make_can_msg("SCC12", bus, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
 
