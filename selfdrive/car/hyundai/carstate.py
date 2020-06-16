@@ -74,7 +74,7 @@ class CarState(CarStateBase):
 
     #TODO: find pedal signal for EV/HYBRID Cars
     ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
-     ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
+    ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
     # if (cp.vl["TCS13"]["DriverOverride"] == 0 and cp.vl["TCS13"]['ACC_REQ'] == 1):
     #   ret.pedal_gas = 0
     # else:
@@ -135,7 +135,7 @@ class CarState(CarStateBase):
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.vision_data = cp_cam.vl["V_OptData_739"]
-    self.lead_lat_pos = cp_cam.vl["V_OptData_73b"]["ObjLatPos"]
+    self.lead_lat_pos = cp_cam.vl["V_OptData_73b"]["Vision_ObjLatPos"]
     self.lead_status = cp_cam.vl["738LCAN"]["Target_Info"]
     self.clu11 = cp.vl["CLU11"]
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
