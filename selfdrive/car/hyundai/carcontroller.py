@@ -150,9 +150,9 @@ class CarController():
       can_sends.append(create_scc13(self.packer, 0))
       can_sends.append(create_scc13(self.packer, 2))
       #cloudlog.info("create_scc13(self.packer)")
-     if frame % 50 == 0:
-       can_sends.append(create_FRT_RADAR11(self.packer, 0))
-       can_sends.append(create_FRT_RADAR11(self.packer, 2))
+    if frame % 50 == 0:
+      can_sends.append(create_FRT_RADAR11(self.packer, 0))
+      can_sends.append(create_FRT_RADAR11(self.packer, 2))
     #20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in [CAR.SONATA, CAR.PALISADE]:
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))

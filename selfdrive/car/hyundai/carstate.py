@@ -76,10 +76,10 @@ class CarState(CarStateBase):
     ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
     ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
     if (cp.vl["TCS13"]["DriverOverride"] == 0 and cp.vl["TCS13"]['ACC_REQ'] == 1):
-        ret.pedal_gas = 0
-      else:
-        ret.pedal_gas = cp.vl["EMS12"]['TPS']
-      ret.car_gas = cp.vl["EMS12"]['TPS']
+      ret.pedal_gas = 0
+    else:
+      ret.pedal_gas = cp.vl["EMS12"]['TPS']
+    ret.car_gas = cp.vl["EMS12"]['TPS']
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection,
     # as this seems to be standard over all cars, but is not the preferred method.
@@ -186,6 +186,8 @@ class CarState(CarStateBase):
       ("ACCEnable", "TCS13", 0),
       ("BrakeLight", "TCS13", 0),
       ("DriverBraking", "TCS13", 0),
+      ("DriverOverride", "TCS13", 0),
+      ("ACC_Req", "TCS13", 0),
 
       ("ESC_Off_Step", "TCS15", 0),
 
@@ -201,6 +203,7 @@ class CarState(CarStateBase):
       ("SAS_Speed", "SAS11", 0),
 
       ("PV_AV_CAN", "EMS12", 0),
+      ("TPS", "EMS12", 0),
       ("CF_Ems_AclAct", "EMS16", 0),
     ]
 
