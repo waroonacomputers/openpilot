@@ -14,10 +14,19 @@ def get_radar_can_parser(CP):
     ("ACC_ObjLatPos", "SCC11", 0),
     ("ACC_ObjDist", "SCC11", 0),
     ("ACC_ObjRelSpd", "SCC11", 0),
+
+    ("Target_Info","738LCAN",0),
+
+    ("Vision_ObjLatPos","V_OptData_73b",0),
+    ("Vision_ObjDist_2_High","V_OptData_739",0),
+    ("Vision_ObjDist_High","V_OptData_739",0),
+    ("Vision_ObjDist_Low","V_OptData_739",0),
+    ("Vision_ObjRelSpd","V_OptData_739",0),
   ]
   checks = [
     # address, frequency
-    ("SCC11", 50),
+    #("SCC11", 50),
+    ("V_OptData_739", 25),
   ]
   return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
 
@@ -57,16 +66,16 @@ class RadarInterface(RadarInterfaceBase):
       errors.append("canError")
     ret.errors = errors
 
-    valid = cpt["SCC11"]['ACC_ObjStatus']
+    valid = cpt["738LCAN"]["Target_Info"] > 1
     if valid:
       for ii in range(2):
         if ii not in self.pts:
           self.pts[ii] = car.RadarData.RadarPoint.new_message()
           self.pts[ii].trackId = self.track_id
           self.track_id += 1
-        self.pts[ii].dRel = cpt["SCC11"]['ACC_ObjDist']  # from front of car
-        self.pts[ii].yRel = -cpt["SCC11"]['ACC_ObjLatPos']  # in car frame's y axis, left is negative
-        self.pts[ii].vRel = cpt["SCC11"]['ACC_ObjRelSpd']
+        self.pts[ii].dRel = cpt["V_OptData_739"]['Vision_ObjDist_High']  # from front of car
+        self.pts[ii].yRel = -cpt["V_OptData_73b"]['Vision_ObjLatPos']  # in car frame's y axis, left is negative
+        self.pts[ii].vRel =  cpt["V_OptData_739"]['Vision_ObjRelSpd']
         self.pts[ii].aRel = float('nan')
         self.pts[ii].yvRel = float('nan')
         self.pts[ii].measured = True
