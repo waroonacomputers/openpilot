@@ -20,7 +20,7 @@ def create_scc11(packer, bus, enabled, count, set_speed, lead_status, vision_dat
     "ACC_ObjStatus": lead_status,
     "ACC_ObjLatPos":lat_pos,
     "ACC_ObjRelSpd":vision_data["Vision_ObjRelSpd"],
-    "ACC_ObjDist": vision_data["Vision_Obj_Dist_High"],
+    "ACC_ObjDist": vision_data["Vision_ObjDist_High"],
   }
   return packer.make_can_msg("SCC11", bus, values)
 
