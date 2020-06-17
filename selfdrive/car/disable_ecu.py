@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import struct
 import traceback
 
 import cereal.messaging as messaging
