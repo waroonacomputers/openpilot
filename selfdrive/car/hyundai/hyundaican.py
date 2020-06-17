@@ -20,7 +20,7 @@ def create_scc11(packer, bus, enabled, count, set_speed, lead_status, vision_dat
     "ACC_ObjStatus": lead_status,
     "ACC_ObjLatPos":lat_pos,
     "ACC_ObjRelSpd":vision_data["Vision_ObjRelSpd"],
-    "ACC_ObjDist": vision_data["Obj_Dist_High"],
+    "ACC_ObjDist": vision_data["Vision_Obj_Dist_High"],
   }
   return packer.make_can_msg("SCC11", bus, values)
 
@@ -45,7 +45,7 @@ def create_scc12(packer, bus, apply_accel, enabled, resuming, cnt):
     "AEB_StopReq": 0,
     "CR_VSM_Alive": cnt,
     "CR_VSM_ChkSum": 0,
-    "aReqValue": apply_accel - 1.0 if enabled else 0,
+    "aReqValue": apply_accel if enabled else 0,
     "aReqRaw": apply_accel if enabled else 0,
   }
   dat = packer.make_can_msg("SCC12", bus, values)[2]
