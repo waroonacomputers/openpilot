@@ -135,8 +135,8 @@ class CarController():
 
     if frame % 2 == 0:
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
-      can_sends.append(create_scc11(self.packer, 0, enabled, self.scc11_cnt, set_speed, CC.lead_status, CC.vision_data, CC.lead_lat_pos))
-      can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt, set_speed, CC.lead_status, CC.vision_data, CC.lead_lat_pos))
+      can_sends.append(create_scc11(self.packer, 0, enabled, self.scc11_cnt, set_speed, CS.lead_status, CS.vision_data, CS.lead_lat_pos))
+      can_sends.append(create_scc11(self.packer, 2, enabled, self.scc11_cnt, set_speed, CS.lead_status, CS.vision_data, CS.lead_lat_pos))
       self.scc11_cnt += 1
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
       can_sends.append(create_scc12(self.packer, 0, apply_accel, enabled, self.resuming, self.scc12_cnt))
