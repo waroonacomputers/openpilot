@@ -29,7 +29,7 @@ def disable_ecu(ecu_addr, logcan, sendcan, bus, timeout=0.1, retry=5, debug=Fals
   for i in range(retry):
     try:
       # enter extended diagnostic session
-      query = IsoTpParallelQuery(sendcan, logcan, bus, [ecu_addr], [HYUNDAI_EXT_CLUSTER_REQUEST], [HYUNDAI_EXT_CLUSTER_RESPONSE], debug=debug)
+      query = IsoTpParallelQuery(sendcan, logcan, bus, [ecu_addr], [HYUNDAI_EXT_CLUSTER_REQUEST], [EXT_DIAG_RESPONSE], debug=debug)
       for addr, dat in query.get_data(timeout).items():
         print(f"ecu communication control disable tx/rx ...")
         # communication control disable tx and rx
