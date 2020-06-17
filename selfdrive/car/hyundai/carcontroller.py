@@ -148,7 +148,7 @@ class CarController():
 
     if frame % 10 == 0:
       # tester present - w/ no response (keeps radar disabled)
-      can_sends.append([0x7d0, 0, b"\x02\x3E\x80\x00\x00\x00\x00\x00", 1 if CS.CP.isPandaBlack else 0])
+      can_sends.append([0x7c6, 0, b"\x02\x3E\x80\x00\x00\x00\x00\x00", 1 if CS.CP.isPandaBlack else 0])
     if frame % 20 == 0:
       can_sends.append(create_scc13(self.packer, 0))
       can_sends.append(create_scc13(self.packer, 2))
