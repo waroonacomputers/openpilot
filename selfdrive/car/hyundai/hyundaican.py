@@ -67,8 +67,8 @@ def create_scc14(packer, bus, enabled, resuming):
     "JerkLowerLimit" : 0.5 if enabled else 0,
     "ComfortBandUpper" : 1.26 if enabled else 0,
     "ComfortBandLower" : -4.14 if enabled else 0,
-    "ACCMode" : 2 if resuming else 1 if enabled else 4,
-    "ObjGap" : 5 if enabled else 2,
+    "SCCMode2" : 2 if resuming else 1 if enabled else 4,
+    "ColRiskF" : 5 if enabled else 2,
   }
   return packer.make_can_msg("SCC14", bus, values)
 
