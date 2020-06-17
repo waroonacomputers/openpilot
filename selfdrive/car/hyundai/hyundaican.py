@@ -34,7 +34,7 @@ def create_scc12(packer, bus, gas, apply_accel, enabled, resuming, cnt):
     "CF_VSM_BeltCmd": 0,
     "ACCFailInfo": 0,
     "ACCMode": 2 if (gas and (apply_accel >= 0) and enabled or resuming) else 1 if enabled else 0,
-    "StopReq": 0,
+    "StopReq": 1 if (not gas and (apply_accel <= 0) else 0, #test
     "CR_VSM_DecCmd": 0,
     "TakeOverReq": 0,
     "PreFill": 0,
