@@ -24,7 +24,6 @@ def get_radar_can_parser(CP):
   checks = [
     # address, frequency
     #("SCC11", 50),
-    # ("V_OptData_739", 25),
   ]
   return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 1)
 
@@ -71,7 +70,7 @@ class RadarInterface(RadarInterfaceBase):
           self.pts[ii] = car.RadarData.RadarPoint.new_message()
           self.pts[ii].trackId = self.track_id
           self.track_id += 1
-        self.pts[ii].dRel = cpt["V_OptData_739"]['Vision_ObjDist_High']  # from front of car
+        self.pts[ii].dRel =  cpt["V_OptData_739"]['Vision_ObjDist_High']  # from front of car
         self.pts[ii].yRel = -cpt["V_OptData_73b"]['Vision_ObjLatPos']  # in car frame's y axis, left is negative
         self.pts[ii].vRel =  cpt["V_OptData_739"]['Vision_ObjRelSpd']
         self.pts[ii].aRel = float('nan')

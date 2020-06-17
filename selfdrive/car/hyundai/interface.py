@@ -9,6 +9,9 @@ EventName = car.CarEvent.EventName
 ButtonType = car.CarState.ButtonEvent.Type
 
 class CarInterface(CarInterfaceBase):
+  def __init__(self, CP, CarController, CarState):
+    super().__init__(CP,CarController,CarState)
+    self.cp_lcan = self.CS.el_can_can_parser(CP)
 
   @staticmethod
   def compute_gb(accel, speed):
@@ -176,9 +179,10 @@ class CarInterface(CarInterfaceBase):
   def update(self, c, can_strings):
     self.cp.update_strings(can_strings)
     self.cp_cam.update_strings(can_strings)
+    self.cp_lcan.update_strings(can_strings)
 
-    ret = self.CS.update(self.cp, self.cp_cam)
-    ret.canValid = self.cp.can_valid
+    ret = self.CS.update(self.cp, self.cp_cam, self.cp_lcan)
+    ret.canValid = self.cp.can_valid and self.cp_lcan.can_valid and self.cp_cam.can_valid
 
     # TODO: button presses
     ret.buttonEvents = []

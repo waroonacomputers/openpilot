@@ -13,7 +13,7 @@ class CarState(CarStateBase):
     self.cruise_main_button = 0
     self.cruise_speed = 0
 
-  def update(self, cp, cp_cam):
+  def update(self, cp, cp_cam, cp_lcan):
     ret = car.CarState.new_message()
 
     ret.doorOpen = any([cp.vl["CGW1"]['CF_Gway_DrvDrSw'], cp.vl["CGW1"]['CF_Gway_AstDrSw'],
@@ -134,13 +134,13 @@ class CarState(CarStateBase):
 
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
-    self.vision_data = cp_cam.vl["V_OptData_739"]
-    self.lead_lat_pos = cp_cam.vl["V_OptData_73b"]["Vision_ObjLatPos"]
-    self.lead_status = cp_cam.vl["738LCAN"]["Target_Info"]
+    self.vision_data = cp_lcan.vl["V_OptData_739"]
+    self.lead_lat_pos = cp_lcan.vl["V_OptData_73b"]["Vision_ObjLatPos"]
+    self.lead_status = cp_lcan.vl["738LCAN"]["Target_Info"]
     self.clu11 = cp.vl["CLU11"]
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
     self.steer_state = cp.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
-    self.lead_distance = cp_cam.vl["V_OptData_739"]['Vision_ObjDist_High']
+    self.lead_distance = cp_lcan.vl["V_OptData_739"]['Vision_ObjDist_High']
 
     return ret
 
@@ -279,12 +279,22 @@ class CarState(CarStateBase):
       ("CF_Lkas_FcwOpt_USM", "LKAS11", 0),
       ("CF_Lkas_LdwsOpt_USM", "LKAS11", 0),
 
+
+    ]
+
+    checks = []
+
+    return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
+
+  def el_can_can_parser(CP):
+
+    signals = [
+      # sig_name, sig_address, default
+
       ("Target_Info","738LCAN",0),
 
       ("Vision_ObjLatPos","V_OptData_739",0),
-      ("Vision_ObjDist_2_High","V_OptData_739",0),
       ("Vision_ObjDist_High","V_OptData_739",0),
-      ("Vision_ObjDist_Low","V_OptData_739",0),
       ("Vision_ObjRelSpd","V_OptData_739",0),
 
       ("Vision_ObjLatPos","V_OptData_73b",0),
@@ -292,4 +302,4 @@ class CarState(CarStateBase):
 
     checks = []
 
-    return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
+    return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 1)
