@@ -28,7 +28,7 @@ def get_radar_can_parser(CP):
     #("SCC11", 50),
     # ("V_OptData_739", 25),
   ]
-  return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
+  return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
 
 
 class RadarInterface(RadarInterfaceBase):
