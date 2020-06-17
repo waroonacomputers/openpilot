@@ -24,7 +24,7 @@ def create_scc11(packer, bus, enabled, count, set_speed, lead_status, vision_dat
   }
   return packer.make_can_msg("SCC11", bus, values)
 
-def create_scc12(packer, bus, apply_accel, enabled, resuming, cnt):
+def create_scc12(packer, bus, gas, apply_accel, enabled, resuming, cnt):
   values = {
     "CF_VSM_Prefill": 0,
     "CF_VSM_DecCmdAct": 0,
