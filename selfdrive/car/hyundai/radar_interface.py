@@ -15,20 +15,18 @@ def get_radar_can_parser(CP):
     # ("ACC_ObjDist", "SCC11", 0),
     # ("ACC_ObjRelSpd", "SCC11", 0),
 
-    ("Target_Info","738LCAN",0),
+    ("Target_Info", "738LCAN",0),
 
-    ("Vision_ObjLatPos","V_OptData_73b",0),
-    ("Vision_ObjDist_2_High","V_OptData_739",0),
-    ("Vision_ObjDist_High","V_OptData_739",0),
-    ("Vision_ObjDist_Low","V_OptData_739",0),
-    ("Vision_ObjRelSpd","V_OptData_739",0),
+    ("Vision_ObjLatPos", "V_OptData_73b",0),
+    ("Vision_ObjDist_High", "V_OptData_739",0),
+    ("Vision_ObjRelSpd", "V_OptData_739",0),
   ]
   checks = [
     # address, frequency
     #("SCC11", 50),
     # ("V_OptData_739", 25),
   ]
-  return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
+  return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 1)
 
 
 class RadarInterface(RadarInterfaceBase):
