@@ -286,6 +286,7 @@ class CarState(CarStateBase):
 
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
 
+  @staticmethod
   def el_can_can_parser(CP):
 
     signals = [
