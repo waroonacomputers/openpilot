@@ -3,12 +3,12 @@ from selfdrive.car.hyundai.values import CAR, CHECKSUM
 
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 
-def create_scc11(packer, bus, enabled, count, set_speed, lead_status, vision_data, lat_pos):
+def create_scc11(packer, bus, enabled, frame, set_speed, lead_status, vision_data, lat_pos):
 
   values = {
     "MainMode_ACC": enabled,
     "SCCInfoDisplay": 0,
-    "AliveCounterACC": count,
+    "AliveCounterACC": (frame + 8) % 0x10,
     "VSetDis": set_speed if enabled else 0,  # km/h velosity
     "ObjValid": lead_status > 1,
     "DriverAlertDisplay": 0,
@@ -24,7 +24,7 @@ def create_scc11(packer, bus, enabled, count, set_speed, lead_status, vision_dat
   }
   return packer.make_can_msg("SCC11", bus, values)
 
-def create_scc12(packer, bus, gas, apply_accel, enabled, resuming, cnt):
+def create_scc12(packer, bus, gas, apply_accel, enabled, resuming, frame):
   values = {
     "CF_VSM_Prefill": 0,
     "CF_VSM_DecCmdAct": 0,
@@ -43,7 +43,7 @@ def create_scc12(packer, bus, gas, apply_accel, enabled, resuming, cnt):
     "AEB_Status": 0,
     "AEB_CmdAct": 0,
     "AEB_StopReq": 0,
-    "CR_VSM_Alive": cnt,
+    "CR_VSM_Alive": frame % 0x10,
     "CR_VSM_ChkSum": 0,
     "aReqValue": apply_accel if enabled else 0,
     "aReqRaw": apply_accel if enabled else 0,
