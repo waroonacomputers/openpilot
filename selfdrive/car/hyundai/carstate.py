@@ -56,7 +56,7 @@ class CarState(CarStateBase):
     if int(cp.vl["CLU11"]["CF_Clu_Vanz"]) > 18:
       self.cruise_speed = cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
     else:
-      self.cruise_speed = self.cruise_speed-(1 * CV.MPH_TO_MS) if (frame % 2 == 0) and cp.vl["CLU11"]["CF_Clu_CruiseSwState"] != 0 else self.cruise_speed
+      self.cruise_speed = self.cruise_speed-(1 * CV.MPH_TO_MS) and cp.vl["CLU11"]["CF_Clu_CruiseSwState"] != 0 else self.cruise_speed
 
     if ret.cruiseState.enabled:
       ret.cruiseState.speed = self.cruise_speed
