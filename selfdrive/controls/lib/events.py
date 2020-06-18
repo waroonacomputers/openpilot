@@ -190,7 +190,7 @@ EVENTS = {
   EventName.gasPressed: {ET.PRE_ENABLE: None},
 
 
-  EventName.focusRecoverActive: {},
+  #EventName.focusRecoverActive: {},
 
   # ********** events only containing alerts displayed in all states **********
 
