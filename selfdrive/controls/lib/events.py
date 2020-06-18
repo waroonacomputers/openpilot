@@ -189,7 +189,6 @@ EVENTS = {
 
   EventName.gasPressed: {ET.PRE_ENABLE: None},
 
-  EventName.laneChangeBlocked: {},
 
   EventName.focusRecoverActive: {},
 
