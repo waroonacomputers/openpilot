@@ -23,6 +23,7 @@ from selfdrive.controls.lib.alertmanager import AlertManager
 from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.controls.lib.planner import LON_MPC_STEP
 from selfdrive.locationd.calibration_helpers import Calibration
+from selfdrive.swaglog import cloudlog
 
 LDW_MIN_SPEED = 31 * CV.MPH_TO_MS
 LANE_DEPARTURE_THRESHOLD = 0.1
@@ -98,7 +99,8 @@ class Controls:
     put_nonblocking("LongitudinalControl", "1" if self.CP.openpilotLongitudinalControl else "0")
 
     if self.CP.openpilotLongitudinalControl and self.CP.safetyModel in [car.CarParams.SafetyModel.hyundai]:
-      disable_ecu(0x7c6, self.can_sock, self.pm.sock['sendcan'], 0, timeout=1, retry=10)
+      disable_ecu(0x7C6, self.can_sock, self.pm.sock['sendcan'], 0, timeout=1, retry=10)
+      disable_ecu(0x7CE, self.can_sock, self.pm.sock['sendcan'], 0, timeout=1, retry=10)
     self.CC = car.CarControl.new_message()
     self.AM = AlertManager()
     self.events = Events()
