@@ -53,10 +53,10 @@ class CarState(CarStateBase):
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
 
-    if int(cp.vl["CLU11"]["CF_Clu_Vanz"]) > 20:
+    if int(cp.vl["CLU11"]["CF_Clu_Vanz"]) > 18:
       self.cruise_speed = cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
     else:
-      self.cruise_speed = int(cp.vl["CLU11"]["CF_Clu_Vanz"]) * speed_conv
+      self.cruise_speed -= (1 * CV.MPH_TO_MS) if (frame % 2 == 0) and cp.vl["CLU11"]["CF_Clu_CruiseSwState"] != 0
 
     if ret.cruiseState.enabled:
       ret.cruiseState.speed = self.cruise_speed
