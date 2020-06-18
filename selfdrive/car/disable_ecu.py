@@ -48,5 +48,5 @@ if __name__ == "__main__":
   sendcan = messaging.pub_sock('sendcan')
   logcan = messaging.sub_sock('can')
   time.sleep(1)
-  disabled = disable_ecu(0x7c6, logcan, sendcan, 1, debug=True)
+  disabled = disable_ecu(0x7c6, logcan, sendcan, 0, debug=True)
   print(f"disabled: {disabled}")
