@@ -69,6 +69,8 @@ class CarController():
     self.scc12_cnt = 0
     self.last_enabled = False
     self.resuming = False
+    self.lead_visible = False
+    self.lead_debounce = 0
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
              left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible):
@@ -130,13 +132,20 @@ class CarController():
           self.last_resume_frame = frame
           self.resume_cnt = 0
     # reset lead distnce after the car starts moving
+    if lead_visible:
+      self.lead_visible = True
+      self.lead_debounce = 100
+    elif self.lead_debounce > 0:
+      self.lead_debounce -= 1
+    else:
+      self.lead_visible = lead_visible
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
 
     if frame % 2 == 0:
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
-      can_sends.append(create_scc11(self.packer, 0, enabled, frame, set_speed, CS.lead_status, CS.vision_data, CS.lead_lat_pos))
-      can_sends.append(create_scc11(self.packer, 2, enabled, frame, set_speed, CS.lead_status, CS.vision_data, CS.lead_lat_pos))
+      can_sends.append(create_scc11(self.packer, 0, enabled, frame, set_speed, lead_visible, CS.vision_data, CS.lead_lat_pos))
+      can_sends.append(create_scc11(self.packer, 2, enabled, frame, set_speed, lead_visible, CS.vision_data, CS.lead_lat_pos))
 
       #cloudlog.info("create_scc12(self.packer, %d, %d, %d)" % (apply_accel, enabled, self.scc12_cnt))
       can_sends.append(create_scc12(self.packer, 0, actuators.gas, apply_accel, enabled, self.resuming, frame))
