@@ -7,7 +7,7 @@ def create_scc11(packer, bus, enabled, frame, set_speed, lead_status, vision_dat
 
   values = {
     "MainMode_ACC": enabled,
-    "SCCInfoDisplay": 0,
+    "SCCInfoDisplay": 3,
     "AliveCounterACC": (frame + 8) % 0x10,
     "VSetDis": set_speed if enabled else 0,  # km/h velosity
     "ObjValid": lead_status > 1,
@@ -83,6 +83,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
                   left_lane, right_lane,
                   left_lane_depart, right_lane_depart):
   values = lkas11
+  values["CF_Lkas_FusionState"] = 0
   values["CF_Lkas_LdwsSysState"] = sys_state
   values["CF_Lkas_SysWarning"] = 3 if sys_warning else 0
   values["CF_Lkas_LdwsLHWarning"] = left_lane_depart
