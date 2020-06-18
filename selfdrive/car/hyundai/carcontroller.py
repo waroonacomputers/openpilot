@@ -132,6 +132,9 @@ class CarController():
           self.last_resume_frame = frame
           self.resume_cnt = 0
     # reset lead distnce after the car starts moving
+    elif self.last_lead_distance != 0:
+      self.last_lead_distance = 0
+
     if lead_visible:
       self.lead_visible = True
       self.lead_debounce = 100
@@ -139,8 +142,6 @@ class CarController():
       self.lead_debounce -= 1
     else:
       self.lead_visible = lead_visible
-    elif self.last_lead_distance != 0:
-      self.last_lead_distance = 0
 
     if frame % 2 == 0:
       #cloudlog.info("create_scc11(self.packer, %d, %d)" % (frame, self.scc11_cnt))
