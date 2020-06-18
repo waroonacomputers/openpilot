@@ -1,5 +1,5 @@
 from cereal import car
-from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES
+from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES, EV_HYBRID
 from selfdrive.car.interfaces import CarStateBase
 from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
@@ -72,14 +72,13 @@ class CarState(CarStateBase):
     # TODO: Check this
     ret.brakeLights = bool(cp.vl["TCS13"]['BrakeLight'] or ret.brakePressed)
 
-    #TODO: find pedal signal for EV/HYBRID Cars
-    ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
-    ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
-    # if (cp.vl["TCS13"]["DriverOverride"] == 0 and cp.vl["TCS13"]['ACC_REQ'] == 1):
-    #   ret.pedal_gas = 0
-    # else:
-    #   ret.pedal_gas = cp.vl["EMS12"]['TPS']
-    # ret.car_gas = cp.vl["EMS12"]['TPS']
+    if self.CP.carFingerprint in EV_HYBRID:
+      ret.gas = cp.vl["E_EMS11"]['Accel_Pedal_Pos'] / 256.
+      ret.gasPressed = ret.gas > 0
+    else:
+      ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
+      ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
+
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection,
     # as this seems to be standard over all cars, but is not the preferred method.
