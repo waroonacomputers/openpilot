@@ -121,7 +121,7 @@ class IsoTpParallelQuery():
             request_done[tx_addr] = True
         else:
           request_done[tx_addr] = True
-          cloudlog.warning(f"iso-tp query to 0x{bytes.hex(tx_addr)} bad response: 0x{bytes.hex(dat)}. expected: 0x{bytes.hex(tx_addr)}")
+          cloudlog.warning(f"iso-tp query to 0x{bytes.hex(tx_addr)} bad response: 0x{bytes.hex(dat)}. expected: 0x{bytes.hex(expected_response)}")
 
       if time.time() - start_time > timeout:
         break
