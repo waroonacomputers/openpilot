@@ -166,6 +166,9 @@ class EngagementAlert(Alert):
                      Priority.MID, VisualAlert.none,
                      audible_alert, .2, 0., 0.),
 
+
+# ********** alert callback functions **********
+
 def below_steer_speed_alert(CP, sm, metric):
   speed = int(round(CP.minSteerSpeed * (CV.MS_TO_KPH if metric else CV.MS_TO_MPH)))
   unit = "kph" if metric else "mph"
@@ -183,6 +186,20 @@ def calibration_incomplete_alert(CP, sm, metric):
     "Drive Above %d %s" % (speed, unit),
     AlertStatus.normal, AlertSize.mid,
     Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2)
+
+def no_gps_alert(CP, sm, metric):
+  two = sm['health'].hwType == log.HealthData.HwType.uno
+  return Alert(
+    "Poor GPS reception",
+    "If sky is visible, contact support" if two else "Check GPS antenna placement",
+    AlertStatus.normal, AlertSize.mid,
+    Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2, creation_delay=300.)
+
+def wrong_car_mode_alert(CP, sm, metric):
+  text = "Cruise Mode Disabled"
+  if CP.carName == "honda":
+    text = "Main Switch Off"
+  return NoEntryAlert(text, duration_hud_alert=0.),
 
 EVENTS = {
   # ********** events with no alerts **********
@@ -283,7 +300,7 @@ EVENTS = {
       "Dashcam Mode",
       "Car Unrecognized",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+      Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
 
   EventName.stockAeb: {
@@ -480,8 +497,7 @@ EVENTS = {
 
   EventName.wrongCarMode: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
-    ET.NO_ENTRY: NoEntryAlert("Main Switch Off",
-                              duration_hud_alert=0.),
+    ET.NO_ENTRY: wrong_car_mode_alert,
   },
 
   EventName.wrongCruiseMode: {
@@ -536,11 +552,7 @@ EVENTS = {
   },
 
   EventName.noGps: {
-    ET.PERMANENT: Alert(
-      "Poor GPS reception",
-      "Check GPS antenna placement",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2, creation_delay=300.),
+    ET.PERMANENT: no_gps_alert,
   },
 
   EventName.soundsUnavailable: {
