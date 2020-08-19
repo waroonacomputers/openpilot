@@ -573,8 +573,8 @@ class CarState(CarStateBase):
         ("ComfortBandLower", "SCC14", 0),
       ]
       checks += [
-        ("SCC11", 50),
-        ("SCC12", 50),
+        # ("SCC11", 50),
+        # ("SCC12", 50),
       ]
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
 
