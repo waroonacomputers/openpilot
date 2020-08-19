@@ -331,6 +331,14 @@ FW_VERSIONS = {
     (Ecu.eps, 0x7D4, None): [b'\xf1\x00OS  MDPS C 1.00 1.04 56310K4000\x00 4OEDC104'],
     (Ecu.fwdCamera, 0x7C4, None): [b'\xf1\x00OSE LKAS AT KOR LHD 1.00 1.00 95740-K4100 W40'],
   },
+  CAR.KIA_FORTE: {
+    (Ecu.fwdRadar, 0x7D0, None): [b'\xf1\x00OSev SCC FNCUP      1.00 1.01 99110-K4000        \xf1\xa01.01'],
+    (Ecu.esp, 0x7D1, None): [b'\xf1\x816VFRAF00018.ELF\xf1\x00\x00\x00\x00\x00\x00\x00\xf1\xa01.01'],
+    (Ecu.eps, 0x7D4, None): [b'\xf1\x00BD  MDPS C 1.00 1.04 56310/M6000 4BDDC104'],
+    (Ecu.transmission, 0x7e1, None): [b'\xf1\x87CXJQAM4966515JB0x\xa9\x98\x9b\x99fff\x98feg\x88\x88w\x88Ff\x8f\xff{\xff\xff\xff\xa8\xf6\xf1\x816V280051\x00\x00\xf1\x006V2B0_C2\x00\x006V280051\x00\x00CBD0N20NS3\x9e\xa9\xb7\x03']
+    (Ecu.fwdCamera, 0x7C4, None): [b'\xf1\x00BD  LKAS AT USA LHD 1.00 1.02 95740-M6000 J31'],
+    (Ecu.engine, 0x7e0, None): [b'\xf1\x81616B1051\x00\x00\x00\x00\x00\x00\x00\x00']
+  },
 }
 
 CHECKSUM = {
