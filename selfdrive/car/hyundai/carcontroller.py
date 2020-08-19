@@ -167,11 +167,11 @@ class CarController():
         # self.scc_live = True
         # self.prev_scc_cnt = CS.scc11["AliveCounterACC"]
         # self.scc_update_frame = frame
-
-    self.prev_scc_cnt = CS.scc11["AliveCounterACC"]
+    if self.longcontrol and (CS.scc_bus or not self.scc_live):
+      self.prev_scc_cnt = CS.scc11["AliveCounterACC"]
+      self.scc12_cnt %= 0xF
 
     self.lkas11_cnt = (self.lkas11_cnt + 1) % 0x10
-    self.scc12_cnt %= 0xF
 
     can_sends = []
     can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
