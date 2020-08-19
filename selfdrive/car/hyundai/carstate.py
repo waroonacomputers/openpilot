@@ -297,8 +297,8 @@ class CarState(CarStateBase):
     ]
     if CP.sccBus == 0 and CP.enableCruise:
       checks += [
-        ("SCC11", 50),
-        ("SCC12", 50),
+        # ("SCC11", 50),
+        # ("SCC12", 50),
       ]
     if CP.mdpsBus == 0:
       signals += [
@@ -315,7 +315,7 @@ class CarState(CarStateBase):
         ("CR_Mdps_OutTq", "MDPS12", 0)
       ]
       checks += [
-        ("MDPS12", 50)
+        # ("MDPS12", 50)
       ]
     if CP.sasBus == 0:
       signals += [
@@ -374,7 +374,7 @@ class CarState(CarStateBase):
       ]
       checks += [("FCA11", 50)]
 
-    if CP.carFingerprint in [CAR.SANTA_FE, CAR.SANTA_FE_1]:
+    if CP.carFingerprint in [CAR.SANTA_FE, CAR.SANTA_FE_1, CAR.KIA_FORTE]:
       checks.remove(("TCS13", 50))
     if CP.spasEnabled:
       if CP.mdpsBus == 1:
