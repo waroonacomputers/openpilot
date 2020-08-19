@@ -287,7 +287,6 @@ class CarState(CarStateBase):
 
     checks = [
       # address, frequency
-      ("TCS13", 50),
       ("TCS15", 10),
       ("CLU11", 50),
       ("ESP12", 100),
@@ -372,7 +371,7 @@ class CarState(CarStateBase):
         ("FCA_CmdAct", "FCA11", 0),
         ("CF_VSM_Warn", "FCA11", 0),
       ]
-      checks += [("FCA11", 50)]
+    #  checks += [("FCA11", 50)]
 
     if CP.carFingerprint in [CAR.SANTA_FE, CAR.SANTA_FE_1, CAR.KIA_FORTE]:
       checks.remove(("TCS13", 50))
