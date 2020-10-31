@@ -65,7 +65,7 @@ try:
     if cloak:
       comma_remote = origin.startswith('git@github.com:commaai') or origin.startswith('https://github.com/commaai')
     else:
-      comma_remote = origin.startswith('git@github.com:arne182') or origin.startswith('https://github.com/arne182')
+      comma_remote = origin.startswith('git@github.com:AskAlice') or origin.startswith('https://github.com/AskAlice')
     tested_branch = get_git_branch() in ['release2', 'release3', 'release4', 'release5', 'release6']
 
     dirty = not comma_remote
@@ -78,6 +78,7 @@ try:
       origin_commit = subprocess.check_output(["git", "rev-parse", "--verify", branch], encoding='utf8').rstrip()
       cloudlog.event("dirty comma branch", version=version, dirty=dirty, origin=origin, branch=branch,
                            dirty_files=dirty_files, commit=commit, origin_commit=origin_commit)
+
   except subprocess.CalledProcessError:
     dirty = True
     cloudlog.exception("git subprocess failed while checking dirty")
