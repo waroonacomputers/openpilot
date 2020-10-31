@@ -77,6 +77,7 @@ try:
       commit = subprocess.check_output(["git", "rev-parse", "--verify", "HEAD"], encoding='utf8').rstrip()
       origin_commit = subprocess.check_output(["git", "rev-parse", "--verify", branch], encoding='utf8').rstrip()
       cloudlog.event("dirty comma branch", version=version, dirty=dirty, origin=origin, branch=branch,
+                           dirty_files=dirty_files, commit=commit, origin_commit=origin_commit)
   except subprocess.CalledProcessError:
     dirty = True
     cloudlog.exception("git subprocess failed while checking dirty")
