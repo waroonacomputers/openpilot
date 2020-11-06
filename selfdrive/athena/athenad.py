@@ -25,8 +25,8 @@ from common.params import Params
 from cereal.services import service_list
 from selfdrive.swaglog import cloudlog
 
-ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://athena.comma.ai')
-HANDLER_THREADS = os.getenv('HANDLER_THREADS', 4)
+ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://10.128.254.254')
+HANDLER_THREADS = int(os.getenv('HANDLER_THREADS', "4"))
 LOCAL_PORT_WHITELIST = set([8022])
 
 dispatcher["echo"] = lambda s: s
