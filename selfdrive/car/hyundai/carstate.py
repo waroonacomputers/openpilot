@@ -279,6 +279,23 @@ class CarState(CarStateBase):
       ("AliveCounterACC", "SCC11", 0),
       ("CR_FCA_Alive", "FCA11", 0),
       ("Supplemental_Counter", "FCA11", 0),
+      ("CF_VSM_Prefill", "FCA11", 0),
+      ("CF_VSM_HBACmd", "FCA11", 0),
+      ("CF_VSM_Warn", "FCA11", 0),
+      ("CF_VSM_BeltCmd", "FCA11", 0),
+      ("CR_VSM_DecCmd", "FCA11", 0),
+      ("FCA_Status", "FCA11", 2),
+      ("FCA_CmdAct", "FCA11", 0),
+      ("FCA_StopReq", "FCA11", 0),
+      ("FCA_DrvSetStatus", "FCA11", 0),
+      ("CF_VSM_DecCmdAct", "FCA11", 0),
+      ("FCA_Failinfo", "FCA11", 0),
+      ("FCA_RelativeVelocity", "FCA11", -26),
+      ("FCA_TimetoCollision", "FCA11", 0),
+#      ("CR_FCA_Alive", "FCA11", 0),
+      ("CR_FCA_ChkSum", "FCA11", 0),
+#      ("Supplemental_Counter", "FCA11", 0),
+      ("PAINT1_Status", "FCA11", 0),
     ]
 
     checks = [
