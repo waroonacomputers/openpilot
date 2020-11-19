@@ -1,8 +1,6 @@
 # functions common among cars
 from common.numpy_fast import clip
 
-self.mycnt = 0
-
 # kg of standard extra cargo to count for drive, gas, etc...
 STD_CARGO_KG = 136.
 
