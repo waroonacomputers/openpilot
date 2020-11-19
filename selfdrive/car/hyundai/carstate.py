@@ -13,6 +13,7 @@ class CarState(CarStateBase):
   def __init__(self, CP):
     super().__init__(CP)
 
+    self.mycnt = 0
     #Auto detection for setup
     self.cruise_main_button = 0
     self.cruise_buttons = 0
