@@ -183,10 +183,16 @@ def create_scc42a(packer):
   }
   return packer.make_can_msg("FRT_RADAR11", 0, values)
 
-def create_fca11(packer, fca11, fca11cnt, fca11supcnt):
+def create_fca11(packer, frame, fca11):
   values = fca11
-  values["CR_FCA_Alive"] = fca11cnt
-  values["Supplemental_Counter"] = fca11supcnt
+  values["CF_VSM_Prefill"] = 1
+  values["CF_VSM_HBACmd"] = 3 
+  values["CF_VSM_Warn"] = 3
+  values["CR_VSM_DecCmd"] = 0.55
+  values["FCA_CmdAct"] = 1
+  values["FCA_Status"] = 2
+  values["CR_FCA_Alive"] = frame % 16
+  values["Supplemental_Counter"] = frame % 16
   values["CR_FCA_ChkSum"] = 0
   dat = packer.make_can_msg("FCA11", 0, values)[2]
   values["CR_FCA_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
