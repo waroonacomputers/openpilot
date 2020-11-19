@@ -283,7 +283,7 @@ class CarController():
         else:
           self.fca11inc += 4
 
-        self.fca11alivecnt = self.fca11maxcnt - self.fca11inc
+#        self.fca11alivecnt = self.fca11maxcnt - self.fca11inc
 
         can_sends.append(create_scc11(self.packer, enabled,
                                       self.setspeed, self.lead_visible, lead_dist, lead_vrel, lead_yrel,
@@ -298,8 +298,8 @@ class CarController():
 
         can_sends.append(create_scc14(self.packer, enabled, self.usestockscc, CS.out.stockAeb, apply_accel,
                                       CS.scc14, self.objdiststat, CS.out.gasPressed, self.acc_standstill, CS.out.vEgo))
-        if CS.CP.fcaBus == -1:
-          can_sends.append(create_fca11(self.packer, CS.fca11, self.fca11alivecnt, self.fca11supcnt))
+#        if CS.CP.fcaBus == -1:
+#          can_sends.append(create_fca11(self.packer, CS.fca11, self.fca11alivecnt, self.fca11supcnt))
 
       if frame % 20 == 0:
         can_sends.append(create_scc13(self.packer, CS.scc13))
@@ -314,6 +314,14 @@ class CarController():
       self.fca11alivecnt = CS.fca11init["CR_FCA_Alive"]
       self.fca11supcnt = CS.fca11init["Supplemental_Counter"]
 
+    if frame % 100 == 0:
+        self.mycnt += 1
+        
+    if self.mycnt % 10 == 0:
+        can_sends.append(create_fca11(self.packer, frame, CS.fca11))
+
+      
+      
     # 20 Hz LFA MFA message
     if frame % 5 == 0 and self.lfa_available:
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))
